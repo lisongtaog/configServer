@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+	<description>Spring MVC Configuration</description>
+	<!-- 获取登陆用户参数 拦截器， 这个拦截器依赖于单点登录拦截器， 因为需要从request对象中获取登录用户 -->
+
+	<!--
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/static/**" />
+			<bean class="PowerCheckInterceptor">
+				<property name="baseInter" ref="getBaseInter" />
+				<property name="powerService" ref="powerService" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	-->
+
+	<!-- 使用Annotation自动注册Bean,只扫描@Controller -->
+	<context:component-scan base-package="com.bestgo" use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+				<ref bean="mappingJackson2HttpMessageConverter"/> 
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!--前后端交互 统一使用json -->
+	<bean id="mappingJackson2HttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>text/json;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+		<property name="objectMapper">
+			<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+				<property name="timeZone">
+					<bean class="java.util.TimeZone" factory-method="getTimeZone">
+						<constructor-arg value="GMT+08" />
+					</bean>
+				</property>
+				<property name="serializationInclusion" value="NON_NULL">
+				</property>
+				<!--<property name="serializationInclusion" >
+					<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+				</property>-->
+			</bean>
+		</property>
+	</bean>
+
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="mediaTypes">
+			<map>
+				<entry key="xml" value="application/xml" />
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="favorPathExtension" value="true" />
+	</bean>
+
+
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/static/**" location="/statics/"
+		cache-period="31536000" />
+	<mvc:resources mapping="/index.html" location="/index.html"
+		cache-period="31536000" />
+
+	<!-- 上传文件拦截，设置最大上传文件大小 15M=15*1024*1024(B)=15728640 bytes -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+<!-- 		<property name="maxUploadSize" value="15728640" /> --><!-- 统一修改nginx配置文件 -->
+		<property name="uploadTempDir" value = "/upload" /> 
+	</bean>
+	
+</beans>

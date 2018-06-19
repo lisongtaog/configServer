@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${db.pa.url}" />
+		<property name="username" value="${db.pa.username}" />
+		<property name="password" value="${db.pa.password}" />
+		<property name="proxyFilters">
+	        <list>
+	            <ref bean="log-filter" />
+	        </list>
+	    </property>
+	</bean>
+	<bean id="slaveDataSource1" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${db.pa.url}" />
+		<property name="username" value="TEST_GSCORE_PA" />
+		<property name="password" value="TEST_GSCORE_PA" />
+		<property name="proxyFilters">
+	        <list>
+	            <ref bean="log-filter" />
+	        </list>
+	    </property>
+	</bean>
+	<bean id="mysqlDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${db.jz-core.url}" />
+		<property name="username" value="${db.jz-core.username}" />
+		<property name="password" value="${db.jz-core.password}" />
+		<property name="proxyFilters">
+	        <list>
+	            <ref bean="log-filter" />
+	        </list>
+	    </property>
+	</bean>
+	
+	<bean id="dataSource" class="com.sinosoft.framework.db.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<!-- write -->
+				<entry key="master" value-ref="masterDataSource" />
+				<!-- read -->
+				<entry key="slave1" value-ref="slaveDataSource1" />
+				<entry key="mysql" value-ref="mysqlDataSource"/>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="masterDataSource" />
+	</bean>
+
+	<bean id="dataSources" class="com.sinosoft.framework.db.datasource.DataSources">
+		<property name="dataSources">
+			<map key-type="java.lang.String">
+				<entry key="master">
+					<list>
+						<value>master</value>
+					</list>
+				</entry>
+				<entry key="slave">
+					<list>
+						<value>slave1</value>
+					</list>
+				</entry>
+				<entry key="mysql">
+					<list>
+						<value>mysql</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 动态切换数据源配置 -->
+	<aop:config>
+		<aop:aspect id="c" ref="manyDataSourceAspect">
+			<aop:pointcut id="allService" expression="execution(public * com.sinosoft..service..*ServiceImpl.*(..))" />
+			<!-- <aop:before pointcut-ref="allService" method="before" />
+			<aop:after pointcut-ref="allService" method="after"/> -->
+			<aop:around method="aroundMethod" pointcut-ref="allService" />
+		</aop:aspect>
+	</aop:config>
+	<bean id="manyDataSourceAspect" class="com.sinosoft.framework.db.aspect.DataSourceAspect">
+		<property name="dataSources" ref="dataSources" />
+		<property name="dataSourceConfig" ref="dataSourceConfig"/>
+	</bean>
+	<bean id="dataSourceConfig" class="com.sinosoft.framework.db.aspect.DefaultDataSourceConfigImpl">
+		<property name="methodMap">
+			<map>
+				<entry key="com.sinosoft.**#querySuspendProposal" value="master"/>
+				<entry key="save" value="master"/>
+			</map>
+		</property>
+	</bean>
+	<!-- 
+	<bean id="dataSourceConfig" class="com.sinosoft.common.datasource.DBDataSourceConfig"/>
+	-->
+	<!-- druid 日志输出filter -->
+	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+ 		<property name="statementExecutableSqlLogEnable" value="true" />
+ 		<property name="resultSetLogEnabled" value="false" />
+ 		<property name="statementLogEnabled" value="false" />
+ 		<property name="connectionLogEnabled" value="false" />
+ 		<property name="dataSourceLogEnabled" value="false" />
+    </bean>
+    
+	<!-- 开启事务注解驱动 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>

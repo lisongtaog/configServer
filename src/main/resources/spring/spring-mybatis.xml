@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	
+	<!-- 定义扫描根路径，不使用默认的扫描方式 -->
+	<context:component-scan base-package="com.bestgo.*.service">
+	</context:component-scan>
+
+	<!-- spring与mybatis整合配置，扫描所有dao -->
+	<!--com.bestgo.*.dao ；basePackage多个可以使用逗号分隔;com.bestgo.*.*.dao-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:basePackage="com.bestgo.*.dao"
+		p:sqlSessionFactoryBeanName="sqlSessionFactory" />
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!--dataSource属性指定要用到的连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!--configLocation属性指定mybatis的核心配置文件 -->
+		<property name="configLocation" value="classpath:spring/mybatis-config.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:com/bestgo/**/dao/mapper/*.xml</value>
+			</array>
+		</property>
+		
+		<property name="plugins">
+			<array>
+		      	<bean class="com.github.pagehelper.PageHelper">
+			        <property name="properties">
+			          <value>
+			          	offsetAsPageNum=true
+			          	rowBoundsWithCount=true
+			          	pageSizeZero=true
+			          	reasonable=true
+			          	supportMethodsArguments=false
+			          </value>
+			        </property>
+		      </bean>
+	    	</array>
+		</property>
+	</bean>
+
+</beans>

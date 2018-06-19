@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <beans xmlns="http://www.springframework.org/schema/beans" 
+ 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"  
+  	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+   	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/cache 
+    http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd">    
+	
+	<cache:annotation-driven cache-manager="redisCacheManager"/>	
+	    	
+	<!-- Redis-Cache 开始 -->
+	<context:property-placeholder location="classpath:config/redis.properties" />
+    <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager" c:template-ref="redisTemplate"/>
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+		<property name="connectionFactory" ref="connectionFactory" /> 
+        <property name="hashKeySerializer" ref="keySerializer" />
+        <property name="keySerializer" ref="keySerializer" />
+	</bean>	
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <property name="maxIdle" value="${redis.maxIdle}" />        
+        <property name="maxWaitMillis" value="${redis.maxWait}" />  
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+	<bean id="keySerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" /> 
+    <bean id="connectionFactory"  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  >
+        	<property name="hostName" value="${redis.host}"></property>
+        	<property name="port" value="${redis.port}"></property>
+        	<property name="poolConfig" ref="poolConfig"></property>
+        	<property name="database" value="${redis.database}"></property>
+    </bean>
+    <!-- Redis-Cache 结束-->
+</beans>

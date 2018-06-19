@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"  default-autowire="byName"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xsi:schemaLocation="
+		http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/cache   http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <bean id="dozerBeanConvert" class="org.dozer.spring.DozerBeanMapperFactoryBean">
+	      <property name="mappingFiles" value="classpath:/mapping/*Mapping.xml"/>
+	      <property name="customConverters">
+	          <list/>
+	      </property>
+	      <property name="eventListeners">
+	          <list/>
+	      </property>
+	      <property name="factories">
+	          <map/>
+	      </property>
+	</bean>
+	<!--java对象copy复制 服务-->
+    <bean id="beanConverter" class="com.bestgo.common.service.impl.DozerBeanConverterServiceImpl">
+        <property name="converter">
+        	<ref bean="dozerBeanConvert"/>
+        </property>
+    </bean>
+
+</beans>

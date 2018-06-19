@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 配置Run As Maven build : Goals 参数 : mybatis-generator:generate -Dmybatis.generator.overwrite=true -->
+<!-- 配置 tableName,使用 Run As Maven build 生成 dao model 层 -->
+<generatorConfiguration>
+	<!--数据库驱动包路径 -->
+	<classPathEntry location="C:\Users\lilis\.m2\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar" />
+	<!--<classPathEntry location="C:\Users\Videa\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />-->
+
+	<context id="manager-core" targetRuntime="MyBatis3">
+		<!--关闭注释 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" /><!-- 是否取消注释 -->
+			<property name="suppressDate" value="true" /> <!-- 是否生成注释代时间戳 -->
+		</commentGenerator>
+
+		<!--数据库连接信息 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/manager"
+			userId="root" password="root123">
+		</jdbcConnection>
+
+		<!-- 类型转换 -->
+		<javaTypeResolver>
+			<!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!--生成的model 包路径 -->
+		<javaModelGenerator targetPackage="com.bestgo.gen.entity"
+			targetProject="src\gen\java">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径cn.ffcs.test.domain"， true:cn.ffcs.test.domain".[schemaName] -->
+			<property name="enableSubPackages" value="ture" />
+			<!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!--生成xml mapper文件 路径 -->
+		<sqlMapGenerator targetPackage="com.bestgo.gen.dao.mapper"
+			targetProject="src\gen\java">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径cn.ffcs.test.domain"， true:cn.ffcs.test.domain".[schemaName] -->
+			<property name="enableSubPackages" value="ture" />
+		</sqlMapGenerator>
+
+		<!-- 生成的Dao接口 的包路径 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.bestgo.gen.dao"
+			targetProject="src\gen\java">
+			<property name="enableSubPackages" value="ture" />
+			<!-- 
+			<property name="rootInterface" value="com.sinosoft.catastrophe.dao.base.BaseDao" />
+		    -->
+		</javaClientGenerator>
+
+		<!--对应数据库表名 -->
+		<!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName要生成的实体类名 enable*ByExample是否生成 
+			example类 -->
+		<!--<table tableName="user" schema="" enableCountByExample="false" enableUpdateByExample="false" 
+			enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="true"> -->
+		<!-- 忽略列，不生成bean 字段 <ignoreColumn column="FRED" /> -->
+		<!-- 指定列的java数据类型 <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" 
+			/> -->
+		<!--</table> -->
+
+		<!-- 机构角色类型 -->
+		<table tableName="ad_campaigns_adunit"  schema=""  enableCountByExample="true"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="true" selectByExampleQueryId="true">
+		</table>
+			
+	</context>
+</generatorConfiguration>

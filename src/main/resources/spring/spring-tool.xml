@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	       http://www.springframework.org/schema/tx
+	       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!--配置项服务-->
+	<bean id="codeService" class="com.bestgo.common.service.impl.CodeServiceImpl">
+	</bean>
+	<!--单一配置项的转码-->
+	<bean id="transToolService" class="com.bestgo.common.service.impl.TransCodeServiceImpl">
+		<property name="codeService" ref="codeService"/>
+	</bean>
+	<!--java对象转码服务-->
+ 	<bean id="transformService" class="com.bestgo.common.service.impl.TransformServiceImpl">
+		<property name="transTool" ref="transToolService"/>
+	</bean>	
+	
+</beans>
