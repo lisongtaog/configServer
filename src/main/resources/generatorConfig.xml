@@ -19,7 +19,7 @@
 
 		<!--数据库连接信息 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://127.0.0.1:3306/manager"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/bestgo_config"
 			userId="root" password="root123">
 		</jdbcConnection>
 
@@ -30,16 +30,17 @@
 		</javaTypeResolver>
 
 		<!--生成的model 包路径 -->
-		<javaModelGenerator targetPackage="com.bestgo.gen.entity"
+		<javaModelGenerator targetPackage="com.bestgo.config.entity"
 			targetProject="src\gen\java">
 			<!-- 是否在当前路径下新加一层schema,eg：fase路径cn.ffcs.test.domain"， true:cn.ffcs.test.domain".[schemaName] -->
 			<property name="enableSubPackages" value="ture" />
 			<!-- 是否针对string类型的字段在set的时候进行trim调用 -->
 			<property name="trimStrings" value="true" />
+			<property name="rootClass" value="java.io.Serializable" />
 		</javaModelGenerator>
 
 		<!--生成xml mapper文件 路径 -->
-		<sqlMapGenerator targetPackage="com.bestgo.gen.dao.mapper"
+		<sqlMapGenerator targetPackage="com.bestgo.config.dao.mapper"
 			targetProject="src\gen\java">
 			<!-- 是否在当前路径下新加一层schema,eg：fase路径cn.ffcs.test.domain"， true:cn.ffcs.test.domain".[schemaName] -->
 			<property name="enableSubPackages" value="ture" />
@@ -47,12 +48,10 @@
 
 		<!-- 生成的Dao接口 的包路径 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.bestgo.gen.dao"
+			targetPackage="com.bestgo.config.dao"
 			targetProject="src\gen\java">
 			<property name="enableSubPackages" value="ture" />
-			<!-- 
-			<property name="rootInterface" value="com.sinosoft.catastrophe.dao.base.BaseDao" />
-		    -->
+			<!--<property name="rootInterface" value="com.bestgo.common.dao.BaseDao" />-->
 		</javaClientGenerator>
 
 		<!--对应数据库表名 -->
@@ -65,10 +64,18 @@
 			/> -->
 		<!--</table> -->
 
-		<!-- 机构角色类型 -->
-		<table tableName="ad_campaigns_adunit"  schema=""  enableCountByExample="true"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="true" selectByExampleQueryId="true">
+		<!-- 广告推广规则配置表 -->
+		<table tableName="app_promotion_rule"  schema=""  enableCountByExample="true"
+			   enableUpdateByExample="false" enableDeleteByExample="false"
+			   enableSelectByExample="true" selectByExampleQueryId="true">
+			<columnOverride column="conditions" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<columnOverride column="comments" javaType="java.lang.String" jdbcType="VARCHAR" />
+		</table>
+
+		<!-- APP资源信息表 -->
+		<table tableName="app_resource_data"  schema=""  enableCountByExample="true"
+			   enableUpdateByExample="false" enableDeleteByExample="false"
+			   enableSelectByExample="true" selectByExampleQueryId="true">
 		</table>
 			
 	</context>

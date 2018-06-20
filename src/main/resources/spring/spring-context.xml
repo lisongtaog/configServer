@@ -11,6 +11,18 @@
 	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 	http://www.springframework.org/schema/util 
     http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- 解析配置文件 -->
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:config/*.properties</value>
+			</list>
+		</property>
+	</bean>
 	
 	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="locations">
@@ -22,7 +34,7 @@
 	
 	<context:property-placeholder location="classpath:config/*.properties" />
 
-	<import resource="classpath:spring/mybatis-config.xml"/>
+	<!--<import resource="classpath:spring/mybatis-config.xml"/>-->
 	<import resource="classpath:spring/spring-datasource.xml"/>
 	<import resource="classpath:spring/spring-mybatis.xml"/>
 	<import resource="classpath:spring/spring-cache.xml"/>

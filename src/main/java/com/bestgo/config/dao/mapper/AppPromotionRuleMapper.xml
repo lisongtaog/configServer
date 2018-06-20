@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bestgo.config.dao.AppPromotionRuleMapper" >
+  <resultMap id="BaseResultMap" type="com.bestgo.config.entity.AppPromotionRule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="app_type" property="appType" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="app_pkg" property="appPkg" jdbcType="VARCHAR" />
+    <result column="conditions" property="conditions" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="validstatus" property="validstatus" jdbcType="VARCHAR" />
+    <result column="comments" property="comments" jdbcType="VARCHAR" />
+    <result column="action_type" property="actionType" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="package_name" property="packageName" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="big_image_url" property="bigImageUrl" jdbcType="VARCHAR" />
+    <result column="native_image_url" property="nativeImageUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, app_id, app_type, country, app_pkg, conditions, priority, validstatus, comments, 
+    action_type, link_url, package_name, title, message, icon_url, big_image_url, native_image_url, 
+    create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bestgo.config.entity.AppPromotionRuleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from app_promotion_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_promotion_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from app_promotion_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bestgo.config.entity.AppPromotionRule" >
+    insert into app_promotion_rule (id, app_id, app_type, 
+      country, app_pkg, conditions, 
+      priority, validstatus, comments, 
+      action_type, link_url, package_name, 
+      title, message, icon_url, 
+      big_image_url, native_image_url, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{appType,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{appPkg,jdbcType=VARCHAR}, #{conditions,jdbcType=VARCHAR}, 
+      #{priority,jdbcType=INTEGER}, #{validstatus,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, 
+      #{actionType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{packageName,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{iconUrl,jdbcType=VARCHAR}, 
+      #{bigImageUrl,jdbcType=VARCHAR}, #{nativeImageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bestgo.config.entity.AppPromotionRule" >
+    insert into app_promotion_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appId != null" >
+        app_id,
+      </if>
+      <if test="appType != null" >
+        app_type,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="appPkg != null" >
+        app_pkg,
+      </if>
+      <if test="conditions != null" >
+        conditions,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="validstatus != null" >
+        validstatus,
+      </if>
+      <if test="comments != null" >
+        comments,
+      </if>
+      <if test="actionType != null" >
+        action_type,
+      </if>
+      <if test="linkUrl != null" >
+        link_url,
+      </if>
+      <if test="packageName != null" >
+        package_name,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="iconUrl != null" >
+        icon_url,
+      </if>
+      <if test="bigImageUrl != null" >
+        big_image_url,
+      </if>
+      <if test="nativeImageUrl != null" >
+        native_image_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="appType != null" >
+        #{appType,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="appPkg != null" >
+        #{appPkg,jdbcType=VARCHAR},
+      </if>
+      <if test="conditions != null" >
+        #{conditions,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="validstatus != null" >
+        #{validstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null" >
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null" >
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bigImageUrl != null" >
+        #{bigImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeImageUrl != null" >
+        #{nativeImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bestgo.config.entity.AppPromotionRuleExample" resultType="java.lang.Integer" >
+    select count(*) from app_promotion_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bestgo.config.entity.AppPromotionRule" >
+    update app_promotion_rule
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="appType != null" >
+        app_type = #{appType,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="appPkg != null" >
+        app_pkg = #{appPkg,jdbcType=VARCHAR},
+      </if>
+      <if test="conditions != null" >
+        conditions = #{conditions,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="validstatus != null" >
+        validstatus = #{validstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null" >
+        comments = #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        package_name = #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null" >
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bigImageUrl != null" >
+        big_image_url = #{bigImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeImageUrl != null" >
+        native_image_url = #{nativeImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bestgo.config.entity.AppPromotionRule" >
+    update app_promotion_rule
+    set app_id = #{appId,jdbcType=VARCHAR},
+      app_type = #{appType,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      app_pkg = #{appPkg,jdbcType=VARCHAR},
+      conditions = #{conditions,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      validstatus = #{validstatus,jdbcType=VARCHAR},
+      comments = #{comments,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      icon_url = #{iconUrl,jdbcType=VARCHAR},
+      big_image_url = #{bigImageUrl,jdbcType=VARCHAR},
+      native_image_url = #{nativeImageUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

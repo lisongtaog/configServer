@@ -6,5 +6,15 @@
 </head>
 <body>
 	<h5> this is for test </h5>
+	<form method="post" action="appPromotionConfig/queryResource" enctype="multipart/form-data">
+		<input type="text" name="appPkg" value=""/>
+		<input type="text" name="country" value="Japan"/>
+		<input type="submit" value="配置查询"/>
+	</form>
+	<form method="post" action="appPromotionConfig/queryRule" enctype="multipart/form-data">
+		<input type="text" name="appPkg" value="testApp"/>
+		<input type="text" name="country" value="Japan"/>
+		<input type="submit" value="规则查询"/>
+	</form>
 </body>
 </html>
