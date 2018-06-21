@@ -1,8 +1,10 @@
 package com.bestgo.controller;
 
+import com.bestgo.common.constants.ConfigConstant;
 import com.bestgo.common.dto.ResponseDto;
 import com.bestgo.config.service.AppPromotionConfigService;
 import com.bestgo.user.dto.UserDto;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,11 @@ public class AppPromotionConfigController {
 
     @RequestMapping(value = "/queryRule", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public List queryRule(@RequestParam("appPkg") String appPkg, @RequestParam("country") String country){
+    public List queryRule(@RequestParam(value = "appPkg",required=false) String appPkg, @RequestParam(value = "country",required=false) String country){
 
+        if(StringUtils.isBlank(appPkg)){
+            appPkg = ConfigConstant.DEFAULT;//默认应用包rule配置
+        }
         List result = appPromotionConfigService.queryRules(country,appPkg);
 
         //ResponseDto result  = appPromotionConfigService.saveUser(userDto);
@@ -50,9 +55,7 @@ public class AppPromotionConfigController {
     //public List queryResource(HttpServletRequest request, HttpServletResponse response){//通过request获取参数
     //public List queryResource(@RequestBody AppResourceData appResource){//此方案是 前端传json格式字符串
     //public List queryResource(AppResourceData appResource){//form 表单提交
-    public List queryResource(@RequestParam("appPkg") String appPkg, @RequestParam("country") String country){
-        System.out.println(appPkg);
-        System.out.println(country);
+    public List queryResource(@RequestParam(value = "appPkg",required=false) String appPkg, @RequestParam(value = "country",required=false) String country){
         List result = appPromotionConfigService.queryAppResources(country,appPkg);
         return result;
     }

@@ -4,12 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class AppPromotionRule implements Serializable {
-    private static final long serialVersionUID = -5601458998987339566L;
+    private static final long serialVersionUID = -6579648702278940140L;
     private Integer id;
-
-    private String appId;
-
-    private String appType;
 
     private String country;
 
@@ -49,22 +45,6 @@ public class AppPromotionRule implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId == null ? null : appId.trim();
-    }
-
-    public String getAppType() {
-        return appType;
-    }
-
-    public void setAppType(String appType) {
-        this.appType = appType == null ? null : appType.trim();
     }
 
     public String getCountry() {

@@ -3,8 +3,6 @@
 <mapper namespace="com.bestgo.config.dao.AppPromotionRuleMapper" >
   <resultMap id="BaseResultMap" type="com.bestgo.config.entity.AppPromotionRule" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="app_id" property="appId" jdbcType="VARCHAR" />
-    <result column="app_type" property="appType" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="app_pkg" property="appPkg" jdbcType="VARCHAR" />
     <result column="conditions" property="conditions" jdbcType="VARCHAR" />
@@ -52,9 +50,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, app_id, app_type, country, app_pkg, conditions, priority, validstatus, comments, 
-    action_type, link_url, package_name, title, message, icon_url, big_image_url, native_image_url, 
-    create_time, update_time
+    id, country, app_pkg, conditions, priority, validstatus, comments, action_type, link_url, 
+    package_name, title, message, icon_url, big_image_url, native_image_url, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bestgo.config.entity.AppPromotionRuleExample" >
     select
@@ -82,32 +80,24 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.bestgo.config.entity.AppPromotionRule" >
-    insert into app_promotion_rule (id, app_id, app_type, 
-      country, app_pkg, conditions, 
-      priority, validstatus, comments, 
-      action_type, link_url, package_name, 
-      title, message, icon_url, 
-      big_image_url, native_image_url, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{appType,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{appPkg,jdbcType=VARCHAR}, #{conditions,jdbcType=VARCHAR}, 
-      #{priority,jdbcType=INTEGER}, #{validstatus,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, 
-      #{actionType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{packageName,jdbcType=VARCHAR}, 
-      #{title,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{iconUrl,jdbcType=VARCHAR}, 
-      #{bigImageUrl,jdbcType=VARCHAR}, #{nativeImageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into app_promotion_rule (id, country, app_pkg, 
+      conditions, priority, validstatus, 
+      comments, action_type, link_url, 
+      package_name, title, message, 
+      icon_url, big_image_url, native_image_url, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{country,jdbcType=VARCHAR}, #{appPkg,jdbcType=VARCHAR}, 
+      #{conditions,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{validstatus,jdbcType=VARCHAR}, 
+      #{comments,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, 
+      #{packageName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, 
+      #{iconUrl,jdbcType=VARCHAR}, #{bigImageUrl,jdbcType=VARCHAR}, #{nativeImageUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.bestgo.config.entity.AppPromotionRule" >
     insert into app_promotion_rule
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
-      </if>
-      <if test="appId != null" >
-        app_id,
-      </if>
-      <if test="appType != null" >
-        app_type,
       </if>
       <if test="country != null" >
         country,
@@ -161,12 +151,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="appId != null" >
-        #{appId,jdbcType=VARCHAR},
-      </if>
-      <if test="appType != null" >
-        #{appType,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
         #{country,jdbcType=VARCHAR},
@@ -227,12 +211,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bestgo.config.entity.AppPromotionRule" >
     update app_promotion_rule
     <set >
-      <if test="appId != null" >
-        app_id = #{appId,jdbcType=VARCHAR},
-      </if>
-      <if test="appType != null" >
-        app_type = #{appType,jdbcType=VARCHAR},
-      </if>
       <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
       </if>
@@ -286,9 +264,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bestgo.config.entity.AppPromotionRule" >
     update app_promotion_rule
-    set app_id = #{appId,jdbcType=VARCHAR},
-      app_type = #{appType,jdbcType=VARCHAR},
-      country = #{country,jdbcType=VARCHAR},
+    set country = #{country,jdbcType=VARCHAR},
       app_pkg = #{appPkg,jdbcType=VARCHAR},
       conditions = #{conditions,jdbcType=VARCHAR},
       priority = #{priority,jdbcType=INTEGER},

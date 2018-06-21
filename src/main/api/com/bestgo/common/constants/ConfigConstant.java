@@ -11,5 +11,6 @@ import java.util.List;
  * Date: 2018/6/19 14:24
  */
 public class ConfigConstant {
-
+    /**默认配置标识*/
+    public  static final String DEFAULT = "DEFAULT";
 }
