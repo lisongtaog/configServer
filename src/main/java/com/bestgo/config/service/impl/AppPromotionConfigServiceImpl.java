@@ -31,54 +31,104 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
 
     @Override
     public List queryRules(String country, String appPkg) {
-        //规则是以应用包为基准查找的
-        if(StringUtils.isBlank(appPkg)){//如果包名未传，则全部取默认配置
-            appPkg = ConfigConstant.DEFAULT;
-            country = ConfigConstant.DEFAULT;
-        }
+        //boolean isSystemDefault = false;//是否使用全局默认配置
+        int fixLevel = isRuleExists(country,appPkg);//检查规则查询条件匹配程度
+
         AppPromotionRuleExample example = new AppPromotionRuleExample();
         AppPromotionRuleExample.Criteria criteria = example.createCriteria();
         criteria.andValidstatusEqualTo("1");//状态是有效的
 
-        criteria.andAppPkgEqualTo(appPkg);
-        if(StringUtils.isNotBlank(country)){
+        //规则是以应用包为基准查找的
+        if(fixLevel == 0){//如果包名未传，或者不匹配，则全部取默认配置
+            country = ConfigConstant.DEFAULT;
+            appPkg = ConfigConstant.DEFAULT;
+            //isSystemDefault = true;//使用全局默认配置
             criteria.andCountryEqualTo(country);
-        }else {
-            criteria.andCountryNotEqualTo(ConfigConstant.DEFAULT);
+            criteria.andAppPkgEqualTo(appPkg);
+        }else if(fixLevel == 1){//完全匹配
+            criteria.andCountryEqualTo(country);
+            criteria.andAppPkgEqualTo(appPkg);
+        }else if(fixLevel == 2){//仅country匹配
+            criteria.andCountryEqualTo(country);
+        }else if(fixLevel == 3){//仅appPkg匹配
+            criteria.andAppPkgEqualTo(appPkg);
         }
         example.setOrderByClause(" priority ASC");
         List<AppPromotionRule> result = appPromotionRuleMapper.selectByExample(example);
 
-        if(StringUtils.isNotBlank(appPkg)){
-            if(result == null || result.size() == 0){//此逻辑认为appPkg传递正确/国家错误，如果通过appPkg查询无数据，则查询这appPkg个默认的（国家为DEFAULT）
-                example.clear();
-                criteria = example.createCriteria();
-                criteria.andValidstatusEqualTo("1");//状态是有效的
-                criteria.andAppPkgEqualTo(appPkg);
-                criteria.andCountryEqualTo(ConfigConstant.DEFAULT);
-                example.setOrderByClause(" priority ASC");
-                result = appPromotionRuleMapper.selectByExample(example);
-            }
-
-            if(result == null || result.size() == 0){//此逻辑认为appPkg传递错误，则查询系统默认（appPkg、country均为DEFAULT）
-                example.clear();
-                criteria = example.createCriteria();
-                criteria.andValidstatusEqualTo("1");//状态是有效的
-                criteria.andAppPkgEqualTo(ConfigConstant.DEFAULT);
-                criteria.andCountryEqualTo(ConfigConstant.DEFAULT);
-                example.setOrderByClause(" priority ASC");
-                result = appPromotionRuleMapper.selectByExample(example);
-            }
+        if(result == null || result.size() == 0){//此逻辑认为appPkg传递正确/国家错误，如果通过appPkg查询无数据，则查询这appPkg个默认的（国家为DEFAULT）
+            example.clear();
+            criteria = example.createCriteria();
+            criteria.andValidstatusEqualTo("1");//状态是有效的
+            criteria.andAppPkgEqualTo(ConfigConstant.DEFAULT);
+            criteria.andCountryEqualTo(ConfigConstant.DEFAULT);
+            example.setOrderByClause(" priority ASC");
+            result = appPromotionRuleMapper.selectByExample(example);
         }
 
+        List rtnList = packageRules(result);//封装返回的rules规则
+
+        return rtnList;
+    }
+
+    /**
+     * 查找rules匹配程度
+     * @param country
+     * @param appPkg
+     * @return
+     */
+    private int isRuleExists(String country, String appPkg){
+        int result = 0;//完全不匹配
+        int count = 0;
+        if(StringUtils.isBlank(country) && StringUtils.isBlank(appPkg)){//country、appPkg未传 认为完全不匹配
+            return result;
+        }
+        //计数
+        AppPromotionRuleExample countExample = new AppPromotionRuleExample();
+        AppPromotionRuleExample.Criteria countCriteria = countExample.createCriteria();
+
+        if (StringUtils.isNotBlank(country) && StringUtils.isNotBlank(appPkg)){//完全匹配维度查找
+            countCriteria.andCountryEqualTo(country);
+            countCriteria.andAppPkgEqualTo(appPkg);
+            count = appPromotionRuleMapper.countByExample(countExample);
+            result = count > 0 ? 1 : 0;
+        }
+
+        if(count == 0 && StringUtils.isNotBlank(country)){//国家维度查找
+            countExample.clear();
+            countCriteria = countExample.createCriteria();
+            countCriteria.andCountryEqualTo(country);
+            count = appPromotionRuleMapper.countByExample(countExample);
+            result = count > 0 ? 2 : 0;
+        }
+
+        if(count == 0 && StringUtils.isNotBlank(appPkg)){//appPkg维度查找
+            countExample.clear();
+            countCriteria = countExample.createCriteria();
+            countCriteria.andCountryEqualTo(country);
+            count = appPromotionRuleMapper.countByExample(countExample);
+            result = count > 0 ? 3 : 0;
+        }
+
+        //0：均不匹配 1：完全匹配 2：国家匹配、appPkg不匹配 3：appPkg匹配、国家不匹配
+        return result;
+    }
+
+    /**
+     * 封装返回的rules规则
+     * @param result
+     * @return
+     */
+    private List packageRules(List<AppPromotionRule> result){
         List rtnList = new ArrayList();
         Map itemRule = null;
-        Map action = new HashMap();
+        Map action = null;
         for(AppPromotionRule rule : result){
             itemRule = new HashMap();
             itemRule.put("priority",rule.getPriority());
             itemRule.put("condition",rule.getConditions());
 
+            action = new HashMap();
             action.put("type",rule.getActionType());
             action.put("link_url",rule.getLinkUrl());
             action.put("package_name",rule.getPackageName());
@@ -92,7 +142,7 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
             rtnList.add(itemRule);
         }
 
-        return rtnList;
+        return  rtnList;
     }
 
     @Override

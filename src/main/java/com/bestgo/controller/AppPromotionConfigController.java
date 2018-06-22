@@ -33,9 +33,6 @@ public class AppPromotionConfigController {
     @ResponseBody
     public List queryRule(@RequestParam(value = "appPkg",required=false) String appPkg, @RequestParam(value = "country",required=false) String country){
 
-        if(StringUtils.isBlank(appPkg)){
-            appPkg = ConfigConstant.DEFAULT;//默认应用包rule配置
-        }
         List result = appPromotionConfigService.queryRules(country,appPkg);
 
         //ResponseDto result  = appPromotionConfigService.saveUser(userDto);
