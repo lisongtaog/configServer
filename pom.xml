@@ -47,10 +47,10 @@
 			<artifactId>jstl</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
-		</dependency>
+		</dependency>-->
 
 
 		<dependency>
