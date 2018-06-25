@@ -11,7 +11,7 @@
 	</appender>
 	
 	<appender name="fileLog" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="logs/pa-core.log" />
+		<param name="File" value="../logs/configServer.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="50000KB" />
 		<param name="MaxBackupIndex" value="10" />

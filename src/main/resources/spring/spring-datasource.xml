@@ -18,28 +18,31 @@
 		<property name="url" value="${db.manager.url}" />
 		<property name="username" value="${db.manager.username}" />
 		<property name="password" value="${db.manager.password}" />
+		<property name="maxActive" value="150" />
+		<!--initialSize: 初始化连接 -->
+		<property name="initialSize" value="50" />
 		<property name="proxyFilters">
 	        <list>
-	        	<ref bean="stat-filter" />
-	            <ref bean="log-filter" />
+	        	<!--<ref bean="stat-filter" />
+	            <ref bean="log-filter" />-->
 	        </list>
 	    </property>
 	</bean>
-	
+	<!--
 	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
 		<property name="slowSqlMillis" value="3000" />
 		<property name="logSlowSql" value="true" />
 		<property name="mergeSql" value="true" />
 	</bean>	
-	
+	-->
 	<!-- druid 日志输出filter -->
-	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+	<!--<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
  		<property name="statementExecutableSqlLogEnable" value="true" />
  		<property name="resultSetLogEnabled" value="false" />
  		<property name="statementLogEnabled" value="false" />
  		<property name="connectionLogEnabled" value="false" />
  		<property name="dataSourceLogEnabled" value="false" />
-    </bean>
+    </bean>-->
     
 	<!-- 开启事务注解驱动 -->
 	<tx:annotation-driven transaction-manager="transactionManager" />

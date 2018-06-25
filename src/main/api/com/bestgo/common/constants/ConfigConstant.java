@@ -13,4 +13,8 @@ import java.util.List;
 public class ConfigConstant {
     /**默认配置标识*/
     public  static final String DEFAULT = "DEFAULT";
+    /**有效状态：有效；初始化状态：已初始化*/
+    public  static final String VALIDSTATUS_YES = "1";
+    /**有效状态：无效；初始化状态：未初始化*/
+    public  static final String VALIDSTATUS_NO = "0";
 }

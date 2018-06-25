@@ -9,11 +9,15 @@ import com.bestgo.config.entity.AppResourceData;
 import com.bestgo.config.entity.AppResourceDataExample;
 import com.bestgo.config.service.AppPromotionConfigService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Desc: 广告互推 推广配置服务实现
@@ -21,16 +25,44 @@ import java.util.*;
  * Date: 2018/6/20 12:21
  */
 @Service("appPromotionConfigService")
-@Transactional
 public class AppPromotionConfigServiceImpl implements AppPromotionConfigService {
+    private static Log LOGGER = LogFactory.getLog(AppPromotionConfigServiceImpl.class);
+    /**内存缓存-资源*/
+    private static final Map<String,List> CACHE_RESOURCE = new ConcurrentHashMap<String,List>();
+    /**内存缓存-规则*/
+    private static final Map<String,List> CACH_RULE = new ConcurrentHashMap<String,List>();
 
     @Autowired
     private AppPromotionRuleMapper appPromotionRuleMapper;
     @Autowired
     private AppResourceDataMapper appResourceDataMapper;
 
+
     @Override
-    public List queryRules(String country, String appPkg) {
+    public List queryRules(String country, String appPkg){
+        Long begin = System.currentTimeMillis();
+        LOGGER.info("查询规则缓存开始：country:"+country+"appPkg:"+appPkg+"###");
+        List rtnList = null;
+        if(StringUtils.isBlank(country) && StringUtils.isBlank(appPkg)){//country、appPkg未传 认为完全不匹配
+            return CACH_RULE.get(getCacheKey(ConfigConstant.DEFAULT,ConfigConstant.DEFAULT));
+        }
+        if(StringUtils.isNotBlank(country) && StringUtils.isNotBlank(appPkg)){
+            rtnList = CACH_RULE.get(getCacheKey(country,appPkg));
+        }else if (StringUtils.isNotBlank(country)){
+            rtnList = CACH_RULE.get(getCacheKey(country,ConfigConstant.DEFAULT));
+        }else {
+            rtnList = CACH_RULE.get(getCacheKey(ConfigConstant.DEFAULT,appPkg));
+        }
+
+        if (rtnList == null){//规则无法匹配时，使用系统全局默认规则
+            rtnList = CACH_RULE.get(getCacheKey(ConfigConstant.DEFAULT,ConfigConstant.DEFAULT));
+        }
+        Long end = System.currentTimeMillis();
+        LOGGER.info("查询规则缓存结束,耗时"+ (end - begin) +"毫秒");
+        return rtnList;
+    }
+
+    private List fecthRules(String country, String appPkg) {
         //boolean isSystemDefault = false;//是否使用全局默认配置
         int fixLevel = isRuleExists(country,appPkg);//检查规则查询条件匹配程度
 
@@ -105,7 +137,7 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         if(count == 0 && StringUtils.isNotBlank(appPkg)){//appPkg维度查找
             countExample.clear();
             countCriteria = countExample.createCriteria();
-            countCriteria.andCountryEqualTo(country);
+            countCriteria.andAppPkgEqualTo(appPkg);
             count = appPromotionRuleMapper.countByExample(countExample);
             result = count > 0 ? 3 : 0;
         }
@@ -146,7 +178,22 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
     }
 
     @Override
-    public List<AppResourceData> queryAppResources(String country, String appPkg) {
+    public List<AppResourceData> queryAppResources(String country, String appPkg){
+        Long begin = System.currentTimeMillis();
+        LOGGER.info("&&&查询资源缓存开始：country:"+country+"appPkg:"+appPkg+"&&&");
+        List rtnList = null;
+        if(StringUtils.isBlank(country) || !CACHE_RESOURCE.containsKey(getCacheKey(country,null))){
+            country = ConfigConstant.DEFAULT;//默认国家配置
+            rtnList = CACHE_RESOURCE.get(getCacheKey(country,null));
+        }else {
+            rtnList = CACHE_RESOURCE.get(getCacheKey(country,null));
+        }
+        Long end = System.currentTimeMillis();
+        LOGGER.info("&&&查询资源缓存结束,耗时"+ (end - begin) +"毫秒&&&");
+        return  rtnList;
+    }
+
+    private List<AppResourceData> fetchAppResources(String country, String appPkg) {
         if(StringUtils.isBlank(country)){
             country = ConfigConstant.DEFAULT;//默认国家配置
         }
@@ -198,8 +245,92 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         return rtnList;
     }
 
-    public AppPromotionRuleMapper getAppPromotionRuleMapper() {
-        return appPromotionRuleMapper;
+
+    /**
+     *  应用启动后，执行初始化：将数据库数据加载进入内存
+     *  批量将配置数据，全部加载到内存
+     */
+    @PostConstruct
+    private void initResourceANDRule(){
+        List<String> resourceCountry = appResourceDataMapper.selectDistinctCountry(null);
+        List resourceList = null;
+        String key = null;
+        for (String country : resourceCountry){
+            key = getCacheKey(country,null);
+            resourceList = fetchAppResources(country,null);
+            CACHE_RESOURCE.put(key , resourceList);
+        }
+
+        List<AppPromotionRule> ruleCountryPkg= appPromotionRuleMapper.selectDistinctCountryPkg(null);
+        List ruleList = null;
+        for(AppPromotionRule rule : ruleCountryPkg){
+            key = getCacheKey(rule.getCountry(),rule.getAppPkg());
+            ruleList = fecthRules(rule.getCountry(),rule.getAppPkg());
+            CACH_RULE.put(key , ruleList);
+        }
+    }
+
+    /**
+     *  重新执行初始化配置：将数据库批量配置，全部加载到内存
+     */
+    @Override
+    public synchronized void reloadResourceANDRule(){
+        CACHE_RESOURCE.clear();
+        CACH_RULE.clear();
+        initResourceANDRule();
+    }
+
+    /**
+     * 增量刷新、配置 appPkg资源信息
+     */
+    @Transactional
+    public void incrResource(){
+        List<String> resourceCountry = appResourceDataMapper.selectDistinctCountry(ConfigConstant.VALIDSTATUS_NO);//取未初始化 加载到缓存的
+        List resourceList = null;
+        String key = null;
+        for (String country : resourceCountry){
+            key = getCacheKey(country,null);
+            if (CACHE_RESOURCE.containsKey(key)){
+                CACHE_RESOURCE.remove(key);
+            }
+            resourceList = fetchAppResources(country,null);
+            CACHE_RESOURCE.put(key , resourceList);
+            appResourceDataMapper.updateInitStateByCountryPkg(country,null);
+        }
+    }
+    /**
+     *  增量刷新、配置 规则信息
+     */
+    @Transactional
+    public void incrRule(){
+        List<AppPromotionRule> ruleCountryPkg= appPromotionRuleMapper.selectDistinctCountryPkg(ConfigConstant.VALIDSTATUS_NO);//取未初始化 加载到缓存的
+        List ruleList = null;
+        String key = null;
+        for(AppPromotionRule rule : ruleCountryPkg){
+            key = getCacheKey(rule.getCountry(),rule.getAppPkg());
+            if (CACH_RULE.containsKey(key)){
+                CACH_RULE.remove(key);
+            }
+            ruleList = fecthRules(rule.getCountry(),rule.getAppPkg());
+            CACH_RULE.put(key , ruleList);
+            appPromotionRuleMapper.updateInitStateByCountryPkg(rule.getCountry(),rule.getAppPkg());
+        }
+    }
+
+    /**
+     * 获取缓存key值
+     * @param country
+     * @param appPkg
+     * @return
+     */
+    private String getCacheKey(String country,String appPkg){
+        StringBuffer key = new StringBuffer();
+        if(StringUtils.isBlank(country) && StringUtils.isBlank(appPkg)){
+            key.append(ConfigConstant.DEFAULT).append("_").append(ConfigConstant.DEFAULT);
+        }else{
+            key.append(country).append("_").append(appPkg);
+        }
+        return key.toString();
     }
 
     @Override

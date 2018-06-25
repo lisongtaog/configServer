@@ -57,4 +57,56 @@ public class AppPromotionConfigController {
         return result;
     }
 
+
+    /**
+     * 重新执行初始化配置：将数据库批量配置，全部加载到内存
+     * @return
+     */
+    @RequestMapping(value = "/reloadResourceANDRule", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String reloadResourceANDRule(){
+        String result = "1";
+        try{
+            appPromotionConfigService.reloadResourceANDRule();
+        }catch (Exception e){
+            e.printStackTrace();
+            result = "0";
+        }
+        return result;
+    }
+
+    /**
+     * 增量刷新资源
+     * @return
+     */
+    @RequestMapping(value = "/incrResource", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String incrResource(){
+        String result = "1";
+        try{
+            appPromotionConfigService.incrResource();
+        }catch (Exception e){
+            e.printStackTrace();
+            result = "0";
+        }
+        return result;
+    }
+
+    /**
+     * 增量刷新规则
+     * @return
+     */
+    @RequestMapping(value = "/incrRule", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String incrRule(){
+        String result = "1";
+        try{
+            appPromotionConfigService.incrRule();
+        }catch (Exception e){
+            e.printStackTrace();
+            result = "0";
+        }
+        return result;
+    }
+
 }

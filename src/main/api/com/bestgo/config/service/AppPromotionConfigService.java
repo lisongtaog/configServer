@@ -28,6 +28,20 @@ public interface AppPromotionConfigService {
     public List queryAppResources(String country,String appPkg);
 
     /**
+     * 重新全量加载配置数据
+     */
+    public void reloadResourceANDRule();
+
+    /**
+     * 增量刷新、配置 appPkg资源信息
+     */
+    public void incrResource();
+
+    /**
+     *  增量刷新、配置 规则信息
+     */
+    public void incrRule();
+    /**
      * 添加规则
      * @param rule
      */

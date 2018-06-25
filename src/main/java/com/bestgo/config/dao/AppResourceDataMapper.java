@@ -2,6 +2,7 @@ package com.bestgo.config.dao;
 
 import com.bestgo.config.entity.AppResourceData;
 import com.bestgo.config.entity.AppResourceDataExample;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface AppResourceDataMapper {
     int updateByPrimaryKeySelective(AppResourceData record);
 
     int updateByPrimaryKey(AppResourceData record);
+
+    int updateInitStateByCountryPkg(@Param("country") String country, @Param("appPkg") String appPkg);
+
+    List<String> selectDistinctCountry(@Param("init") String init);
 }

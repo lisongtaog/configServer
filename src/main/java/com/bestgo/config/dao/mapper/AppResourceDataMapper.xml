@@ -9,6 +9,7 @@
     <result column="app_pkg" property="appPkg" jdbcType="VARCHAR" />
     <result column="app_name" property="appName" jdbcType="VARCHAR" />
     <result column="validstatus" property="validstatus" jdbcType="VARCHAR" />
+    <result column="init" property="init" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -42,7 +43,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, app_type, country, app_id, app_pkg, app_name, validstatus, create_time, update_time
+    id, app_type, country, app_id, app_pkg, app_name, validstatus, init, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bestgo.config.entity.AppResourceDataExample" >
     select
@@ -72,12 +74,12 @@
   <insert id="insert" parameterType="com.bestgo.config.entity.AppResourceData" >
     insert into app_resource_data (id, app_type, country, 
       app_id, app_pkg, app_name, 
-      validstatus, create_time, update_time
-      )
+      validstatus, init, create_time, 
+      update_time)
     values (#{id,jdbcType=INTEGER}, #{appType,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
       #{appId,jdbcType=VARCHAR}, #{appPkg,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, 
-      #{validstatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{validstatus,jdbcType=VARCHAR}, #{init,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.bestgo.config.entity.AppResourceData" >
     insert into app_resource_data
@@ -102,6 +104,9 @@
       </if>
       <if test="validstatus != null" >
         validstatus,
+      </if>
+      <if test="init != null" >
+        init,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -131,6 +136,9 @@
       </if>
       <if test="validstatus != null" >
         #{validstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="init != null" >
+        #{init,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -167,6 +175,9 @@
       <if test="validstatus != null" >
         validstatus = #{validstatus,jdbcType=VARCHAR},
       </if>
+      <if test="init != null" >
+        init = #{init,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -184,8 +195,34 @@
       app_pkg = #{appPkg,jdbcType=VARCHAR},
       app_name = #{appName,jdbcType=VARCHAR},
       validstatus = #{validstatus,jdbcType=VARCHAR},
+      init = #{init,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--更新资源状态：将本次初始化的数据，状态置为已初始化-->
+  <update id="updateInitStateByCountryPkg"  >
+    update app_resource_data
+    set init = '1',
+    update_time = now()
+    WHERE init = '0'
+    <if test="country != null" >
+     AND country = #{country,jdbcType=VARCHAR}
+    </if>
+    <if test="appPkg != null" >
+     AND app_pkg = #{appPkg,jdbcType=VARCHAR}
+    </if>
+  </update>
+
+  <select id="selectDistinctCountry" resultType="java.lang.String" parameterType="java.lang.String">
+    select
+    DISTINCT country
+    from app_resource_data
+    <trim prefix="WHERE" prefixOverrides="AND">
+      <if test="init != null" >
+        init = #{init,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
 </mapper>

@@ -585,6 +585,76 @@ public class AppResourceDataExample {
             return (Criteria) this;
         }
 
+        public Criteria andInitIsNull() {
+            addCriterion("init is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitIsNotNull() {
+            addCriterion("init is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitEqualTo(String value) {
+            addCriterion("init =", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitNotEqualTo(String value) {
+            addCriterion("init <>", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitGreaterThan(String value) {
+            addCriterion("init >", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitGreaterThanOrEqualTo(String value) {
+            addCriterion("init >=", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitLessThan(String value) {
+            addCriterion("init <", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitLessThanOrEqualTo(String value) {
+            addCriterion("init <=", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitLike(String value) {
+            addCriterion("init like", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitNotLike(String value) {
+            addCriterion("init not like", value, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitIn(List<String> values) {
+            addCriterion("init in", values, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitNotIn(List<String> values) {
+            addCriterion("init not in", values, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitBetween(String value1, String value2) {
+            addCriterion("init between", value1, value2, "init");
+            return (Criteria) this;
+        }
+
+        public Criteria andInitNotBetween(String value1, String value2) {
+            addCriterion("init not between", value1, value2, "init");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

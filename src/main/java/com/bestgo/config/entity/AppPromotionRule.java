@@ -17,6 +17,8 @@ public class AppPromotionRule implements Serializable {
 
     private String validstatus;
 
+    private String init;
+
     private String comments;
 
     private String actionType;
@@ -85,6 +87,14 @@ public class AppPromotionRule implements Serializable {
 
     public void setValidstatus(String validstatus) {
         this.validstatus = validstatus == null ? null : validstatus.trim();
+    }
+
+    public String getInit() {
+        return init;
+    }
+
+    public void setInit(String init) {
+        this.init = init == null ? null : init.trim();
     }
 
     public String getComments() {

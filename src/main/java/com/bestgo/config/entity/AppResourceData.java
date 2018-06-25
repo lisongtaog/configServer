@@ -19,6 +19,8 @@ public class AppResourceData implements Serializable {
 
     private String validstatus;
 
+    private String init;
+
     private Date createTime;
 
     private Date updateTime;
@@ -77,6 +79,14 @@ public class AppResourceData implements Serializable {
 
     public void setValidstatus(String validstatus) {
         this.validstatus = validstatus == null ? null : validstatus.trim();
+    }
+
+    public String getInit() {
+        return init;
+    }
+
+    public void setInit(String init) {
+        this.init = init == null ? null : init.trim();
     }
 
     public Date getCreateTime() {
