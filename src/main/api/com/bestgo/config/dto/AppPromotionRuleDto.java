@@ -1,10 +1,10 @@
-package com.bestgo.config.entity;
+package com.bestgo.config.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class AppPromotionRule implements Serializable {
-    private static final long serialVersionUID = -6579648702278940140L;
+public class AppPromotionRuleDto implements Serializable {
+
     private Integer id;
 
     private String country;

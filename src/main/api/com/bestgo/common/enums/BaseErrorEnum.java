@@ -3,9 +3,9 @@ package com.bestgo.common.enums;
 /**
  * @description 权限管理系统错误信息枚举类
  */
-public enum ImsErrorEnum {
+public enum BaseErrorEnum {
 
-    IMS_SUCCESS("0000", "处理成功"), IMS_ERROR("9999", "处理失败");
+    SUCCESS("0000", "处理成功"), ERROR("9999", "处理失败");
 
     // 数据校验错误（1打头）
 
@@ -19,7 +19,7 @@ public enum ImsErrorEnum {
     private String name;
 
     // 构造方法
-    private ImsErrorEnum(String code, String name)
+    private BaseErrorEnum(String code, String name)
     {
         this.code = code;
         this.name = name;
@@ -35,7 +35,7 @@ public enum ImsErrorEnum {
      */
     public static String getCodeByName(String name)
     {
-        for (ImsErrorEnum info : ImsErrorEnum.values())
+        for (BaseErrorEnum info : BaseErrorEnum.values())
         {
             if (name.indexOf(info.getName()) > -1)
             {

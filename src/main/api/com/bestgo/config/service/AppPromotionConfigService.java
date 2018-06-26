@@ -1,5 +1,7 @@
 package com.bestgo.config.service;
 
+import com.bestgo.config.dto.AppPromotionRuleDto;
+import com.bestgo.config.dto.AppResourceDataDto;
 import com.bestgo.config.entity.AppPromotionRule;
 import com.bestgo.config.entity.AppResourceData;
 
@@ -43,14 +45,14 @@ public interface AppPromotionConfigService {
     public void incrRule();
     /**
      * 添加规则
-     * @param rule
+     * @param ruleDto
      */
-    public void addRule(AppPromotionRule rule);
+    public void addAppRule(AppPromotionRuleDto ruleDto);
 
     /**
      * 添加app资源
-     * @param resourceData
+     * @param resourceDataDto
      */
-    public void addAppResource(AppResourceData resourceData);
+    public void addAppResource(AppResourceDataDto resourceDataDto);
 
 }

@@ -2,6 +2,9 @@ package com.bestgo.controller;
 
 import com.bestgo.common.constants.ConfigConstant;
 import com.bestgo.common.dto.ResponseDto;
+import com.bestgo.common.enums.BaseErrorEnum;
+import com.bestgo.config.dto.AppPromotionRuleDto;
+import com.bestgo.config.dto.AppResourceDataDto;
 import com.bestgo.config.service.AppPromotionConfigService;
 import com.bestgo.user.dto.UserDto;
 import org.apache.commons.lang.StringUtils;
@@ -81,15 +84,16 @@ public class AppPromotionConfigController {
      */
     @RequestMapping(value = "/incrResource", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public String incrResource(){
-        String result = "1";
+    public ResponseDto incrResource(){
+        ResponseDto responseDto = ResponseDto.instance(null);
         try{
             appPromotionConfigService.incrResource();
         }catch (Exception e){
             e.printStackTrace();
-            result = "0";
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
         }
-        return result;
+        return responseDto;
     }
 
     /**
@@ -98,15 +102,45 @@ public class AppPromotionConfigController {
      */
     @RequestMapping(value = "/incrRule", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public String incrRule(){
-        String result = "1";
+    public ResponseDto incrRule(){
+        ResponseDto responseDto = ResponseDto.instance(null);
         try{
             appPromotionConfigService.incrRule();
         }catch (Exception e){
             e.printStackTrace();
-            result = "0";
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
         }
-        return result;
+        return responseDto;
+    }
+
+    @RequestMapping(value = "/addAppRule", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto addAppRule(@RequestBody AppPromotionRuleDto appPromotionRuleDto){
+        ResponseDto responseDto = ResponseDto.instance(null);
+        try{
+            appPromotionConfigService.addAppRule(appPromotionRuleDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
+    @RequestMapping(value = "/addAppResource", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto addAppResource(@RequestBody AppResourceDataDto appResourceDataDto){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            appPromotionConfigService.addAppResource(appResourceDataDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
     }
 
 }

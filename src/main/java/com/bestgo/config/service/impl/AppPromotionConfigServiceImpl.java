@@ -1,8 +1,11 @@
 package com.bestgo.config.service.impl;
 
 import com.bestgo.common.constants.ConfigConstant;
+import com.bestgo.common.service.BeanConverter;
 import com.bestgo.config.dao.AppPromotionRuleMapper;
 import com.bestgo.config.dao.AppResourceDataMapper;
+import com.bestgo.config.dto.AppPromotionRuleDto;
+import com.bestgo.config.dto.AppResourceDataDto;
 import com.bestgo.config.entity.AppPromotionRule;
 import com.bestgo.config.entity.AppPromotionRuleExample;
 import com.bestgo.config.entity.AppResourceData;
@@ -14,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.krb5.Config;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -27,6 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service("appPromotionConfigService")
 public class AppPromotionConfigServiceImpl implements AppPromotionConfigService {
     private static Log LOGGER = LogFactory.getLog(AppPromotionConfigServiceImpl.class);
+    @Autowired
+    private BeanConverter beanConverter;
     /**内存缓存-资源*/
     private static final Map<String,List> CACHE_RESOURCE = new ConcurrentHashMap<String,List>();
     /**内存缓存-规则*/
@@ -161,6 +167,7 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
             itemRule.put("condition",rule.getConditions());
 
             action = new HashMap();
+            action.put("popupTimes",rule.getPopuptimes());
             action.put("type",rule.getActionType());
             action.put("link_url",rule.getLinkUrl());
             action.put("package_name",rule.getPackageName());
@@ -335,13 +342,38 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
 
     @Override
     @Transactional
-    public void addRule(AppPromotionRule rule) {
-
+    public void addAppRule(AppPromotionRuleDto ruleDto) {
+        AppPromotionRule rule = new AppPromotionRule();
+        beanConverter.convert(ruleDto,rule);
+        rule.setId(null);
+        rule.setValidstatus(ConfigConstant.VALIDSTATUS_YES);
+        rule.setInit(ConfigConstant.VALIDSTATUS_NO);
+        rule.setCreateTime(new Date());
+        rule.setUpdateTime(new Date());
+        appPromotionRuleMapper.insert(rule);
     }
 
     @Override
     @Transactional
-    public void addAppResource(AppResourceData resourceData) {
+    public void addAppResource(AppResourceDataDto resourceDataDto) {
+        String country = resourceDataDto.getCountry();
+        String appType = resourceDataDto.getAppType();
+
+        AppResourceData resourceData = null;
+        for(String appPkg : resourceDataDto.getAppResource()){
+            resourceData = new AppResourceData();
+            resourceData.setId(null);
+            resourceData.setAppType(appType);
+            resourceData.setCountry(country);
+            resourceData.setAppName(null);
+            resourceData.setAppId(null);
+            resourceData.setAppPkg(appPkg);
+            resourceData.setInit(ConfigConstant.VALIDSTATUS_NO);//新插入的数据 未初始化 并加载到内存中
+            resourceData.setValidstatus(ConfigConstant.VALIDSTATUS_YES);
+            resourceData.setCreateTime(new Date());
+            resourceData.setUpdateTime(new Date());
+            appResourceDataMapper.insert(resourceData);
+        }
 
     }
 }

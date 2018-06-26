@@ -1,7 +1,37 @@
+/*jquery validate css --begin*/
+input.error { border: 1px solid red; }
+label.error {
+    background: url('../images/unchecked.gif') no-repeat;
+    padding-left: 16px;
+    margin-left: .3em;
+    color: red;
+    font-style: italic;
+}
+label.valid {
+    background: url('../images/checked.gif') no-repeat;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+/*jquery validate css --end*/
 
-
-
-
-
-
-
+body{
+    font-size:12px;
+}
+form input{
+    text-align: left;
+    vertical-align:middle;
+    margin: 2px 2px;
+}
+table{
+    table-layout:fixed;
+    empty-cells:show;
+    border-collapse: collapse;
+    margin:0 auto;
+}
+table th|td{
+    height:20px;
+}
+table th{
+    border:1px solid #a7d1fd;
+}

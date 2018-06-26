@@ -575,6 +575,66 @@ public class AppPromotionRuleExample {
             return (Criteria) this;
         }
 
+        public Criteria andPopuptimesIsNull() {
+            addCriterion("popupTimes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesIsNotNull() {
+            addCriterion("popupTimes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesEqualTo(Integer value) {
+            addCriterion("popupTimes =", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesNotEqualTo(Integer value) {
+            addCriterion("popupTimes <>", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesGreaterThan(Integer value) {
+            addCriterion("popupTimes >", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("popupTimes >=", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesLessThan(Integer value) {
+            addCriterion("popupTimes <", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesLessThanOrEqualTo(Integer value) {
+            addCriterion("popupTimes <=", value, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesIn(List<Integer> values) {
+            addCriterion("popupTimes in", values, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesNotIn(List<Integer> values) {
+            addCriterion("popupTimes not in", values, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesBetween(Integer value1, Integer value2) {
+            addCriterion("popupTimes between", value1, value2, "popuptimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPopuptimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("popupTimes not between", value1, value2, "popuptimes");
+            return (Criteria) this;
+        }
+
         public Criteria andCommentsIsNull() {
             addCriterion("comments is null");
             return (Criteria) this;
