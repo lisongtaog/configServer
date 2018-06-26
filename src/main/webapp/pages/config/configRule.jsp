@@ -85,7 +85,7 @@
 
     $().ready(function() {
         // 在键盘按下并释放及提交后验证提交表单
-        $("#fm_resource").validate({
+        $("#fm_rule").validate({
             rules: rules,
             messages:messages
         });
