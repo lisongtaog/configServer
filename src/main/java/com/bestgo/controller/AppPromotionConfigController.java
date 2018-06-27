@@ -1,6 +1,7 @@
 package com.bestgo.controller;
 
 import com.bestgo.common.constants.ConfigConstant;
+import com.bestgo.common.dto.PageInfo;
 import com.bestgo.common.dto.ResponseDto;
 import com.bestgo.common.enums.BaseErrorEnum;
 import com.bestgo.config.dto.AppPromotionRuleDto;
@@ -60,6 +61,44 @@ public class AppPromotionConfigController {
         return result;
     }
 
+    /**
+     * 页面查询展示 资源列表
+     * @return
+     */
+    @RequestMapping(value = "/listResource", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto listResource(@RequestBody AppResourceDataDto appResourceDataDto){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            PageInfo page = appPromotionConfigService.listAppResources(appResourceDataDto);
+            responseDto.setResultObj(page);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
+    /**
+     * 页面查询展示 规则列表
+     * @return
+     */
+    @RequestMapping(value = "/listRule", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto listRule(@RequestBody AppPromotionRuleDto appPromotionRuleDto){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            appPromotionConfigService.listAppRules(appPromotionRuleDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
 
     /**
      * 重新执行初始化配置：将数据库批量配置，全部加载到内存

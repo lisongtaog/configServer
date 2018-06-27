@@ -1,12 +1,13 @@
 package com.bestgo.config.dto;
 
+import com.bestgo.common.dto.BaseQueryConditionDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class AppResourceDataDto implements Serializable {
+public class AppResourceDataDto extends BaseQueryConditionDto implements Serializable {
 
     private static final long serialVersionUID = 4550212304545441640L;
     private Integer id;

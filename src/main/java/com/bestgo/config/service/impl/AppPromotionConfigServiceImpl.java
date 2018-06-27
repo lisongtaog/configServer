@@ -1,6 +1,9 @@
 package com.bestgo.config.service.impl;
 
 import com.bestgo.common.constants.ConfigConstant;
+import com.bestgo.common.dto.BaseQueryConditionDto;
+import com.bestgo.common.dto.PageInfo;
+import com.bestgo.common.service.AbstractPageQuery;
 import com.bestgo.common.service.BeanConverter;
 import com.bestgo.config.dao.AppPromotionRuleMapper;
 import com.bestgo.config.dao.AppResourceDataMapper;
@@ -374,6 +377,48 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
             resourceData.setUpdateTime(new Date());
             appResourceDataMapper.insert(resourceData);
         }
+
+    }
+
+    @Override
+    public PageInfo listAppRules(AppPromotionRuleDto ruleDto) {
+
+        return null;
+    }
+
+    @Override
+    public PageInfo listAppResources(AppResourceDataDto resourceDataDto) {
+
+        AbstractPageQuery<AppResourceDataDto, AppResourceDataDto> query = new AbstractPageQuery<AppResourceDataDto, AppResourceDataDto>() {
+            @Override
+            protected List<AppResourceData> doQueryPage(AppResourceDataDto condition) {
+                AppResourceDataExample example = new AppResourceDataExample();
+                AppResourceDataExample.Criteria criteria = example.createCriteria();
+                criteria.andValidstatusEqualTo("1");//状态是有效的
+                if(null !=resourceDataDto && StringUtils.isNotBlank(resourceDataDto.getCountry())){
+                    criteria.andCountryEqualTo(resourceDataDto.getCountry());
+                }
+                if(null != resourceDataDto && StringUtils.isNotBlank(resourceDataDto.getAppType())){
+                    criteria.andAppTypeEqualTo(resourceDataDto.getAppType());
+                }
+                if(null != resourceDataDto && StringUtils.isNotBlank(resourceDataDto.getAppPkg())){
+                    criteria.andAppPkgLike(resourceDataDto.getAppPkg());
+                }
+                example.setOrderByClause(" country ASC,app_type ASC");//根据 app类型升序排列
+                return appResourceDataMapper.selectByExample(example);//查询出所有满足条件的数据
+            }
+
+            @Override
+            protected AppResourceDataDto beanConvert(Object src) {
+                AppResourceDataDto resourceDataDto = beanConverter.convert(src,AppResourceDataDto.class);
+                return resourceDataDto;
+            }
+        };
+
+        PageInfo<AppResourceDataDto> page = null;
+        page = query.queryPage(resourceDataDto);
+
+        return page;
 
     }
 }

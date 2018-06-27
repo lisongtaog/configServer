@@ -1,9 +1,11 @@
 package com.bestgo.config.dto;
 
+import com.bestgo.common.dto.BaseQueryConditionDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class AppPromotionRuleDto implements Serializable {
+public class AppPromotionRuleDto extends BaseQueryConditionDto implements Serializable {
 
     private Integer id;
 

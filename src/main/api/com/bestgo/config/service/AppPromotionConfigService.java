@@ -1,5 +1,6 @@
 package com.bestgo.config.service;
 
+import com.bestgo.common.dto.PageInfo;
 import com.bestgo.config.dto.AppPromotionRuleDto;
 import com.bestgo.config.dto.AppResourceDataDto;
 import com.bestgo.config.entity.AppPromotionRule;
@@ -54,5 +55,18 @@ public interface AppPromotionConfigService {
      * @param resourceDataDto
      */
     public void addAppResource(AppResourceDataDto resourceDataDto);
+
+    /**
+     * 查询配置推广规则（页面）
+     * @param ruleDto    规则信息条件
+     * @return
+     */
+    public PageInfo listAppRules(AppPromotionRuleDto ruleDto);
+    /**
+     * 查询app资源（页面）
+     * @param resourceDataDto    应用资源信息条件
+     * @return
+     */
+    public PageInfo listAppResources(AppResourceDataDto resourceDataDto);
 
 }
