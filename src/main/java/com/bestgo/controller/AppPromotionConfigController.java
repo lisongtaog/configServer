@@ -182,4 +182,35 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
+
+    @RequestMapping(value = "/deleteResource", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResponseDto deleteResource(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            appPromotionConfigService.deleteResource(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
+    @RequestMapping(value = "/deleteRule", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResponseDto deleteRule(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            appPromotionConfigService.deleteRule(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
 }

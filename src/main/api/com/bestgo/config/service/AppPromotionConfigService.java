@@ -69,4 +69,7 @@ public interface AppPromotionConfigService {
      */
     public PageInfo listAppResources(AppResourceDataDto resourceDataDto);
 
+    public void deleteResource(int id);
+    public void deleteRule(int id);
+
 }

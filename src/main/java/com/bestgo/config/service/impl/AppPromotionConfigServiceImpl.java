@@ -421,4 +421,14 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         return page;
 
     }
+
+    @Override
+    public void deleteResource(int id) {
+        appResourceDataMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void deleteRule(int id) {
+        appPromotionRuleMapper.deleteByPrimaryKey(id);
+    }
 }
