@@ -36,6 +36,55 @@
         <input type="button" value="查询" id="submit"/>
     </form>
 </div>
+
+<div id="editDIV" class="float" style="display: none;z-index: 9999;">
+    <button class="closeBtn" style="float: right;">关闭</button>
+    <form id="fm_edit" style="margin:50px 100px;">
+        <label for="id">主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键</label>
+        <input type="text" id="id" name="id"/><br/>
+
+
+        <label for="country">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</label>
+        <input type="text" id="country" name="country"/><br/>
+        <%--后续读取数据库配置，下拉框展示 --%>
+        <%--<select name="country" id="country">
+            <option value="DEFAULT">默认</option>
+            <option value="US">美国</option>
+            <option value="AU">澳大利亚</option>
+            <option value="CA">加拿大</option>
+            <option value="GB">德国</option>
+        </select>--%>
+        <label for="appType">应用类型</label>
+        <select name="appType" id="appType">
+            <option value="01">游戏</option>
+            <option value="02">CallFlash</option>
+            <option value="03">杀毒</option>
+            <option value="04">计步器</option>
+            <option value="05">翻译</option>
+            <option value="06">voip</option>
+            <option value="07">VPN</option>
+            <option value="08">喝水宝</option>
+        </select><br/>
+
+        <label for="appPkg">资源包&nbsp;&nbsp;</label>
+        <input id="appPkg" name="appPkg"></input><br/>
+
+        <label for="validstatus">有效状态</label>
+        <select id="validstatus" name="validstatus">
+            <option value="1">有效</option>
+            <option value="0">无效</option>
+        </select><br/>
+        <%--如果修改，应该是 未初始化--%>
+        <label for="init">初始化状态</label>
+        <select id="init" name="init">
+            <option value="0">未初始化</option>
+            <option value="1">已初始化</option>
+        </select><br/><br/>
+
+        <input type="submit" value="提交" id="edit"/>
+    </form>
+</div>
+
 <div>
     <table id="tab_resource">
         <thead>
@@ -70,7 +119,7 @@
         { "data": "updateTime"},
         { "data": "operate"}
     ];
-
+    var rowIndex = 0;
     var options = {
         "searching": false,// 是否允许检索
         "ordering":false,
@@ -101,7 +150,7 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<button value="'+row.id+'">编辑</button>&nbsp;&nbsp;'
+                    var html ='<button onclick="preEdit('+ ++rowIndex + ')">编辑</button>&nbsp;&nbsp;'
                         +'<button onclick="del('+ row.id + ')">删除</button>';
                     return html;
                 }
@@ -117,9 +166,11 @@
         fetchData(data, callback);
     };
 
+    //从后台获取分页数据
     function fetchData(dataTableData,callback){
+        rowIndex = 0;
         var data = $("#fm_resource").serializeObject();
-        data.pageNo = dataTableData.start / dataTableData.length;
+        data.pageNo = dataTableData.start / dataTableData.length + 1;
         data.pageSize = dataTableData.length;
 
         var url = "${ctx}/appPromotionConfig/listResource";
@@ -133,7 +184,7 @@
                 if(ResponseCode.success === result.resultCode){
                     var responeData = result.resultObj;
                     //console.info(responeData);
-                    console.info(responeData.list);
+                    //console.info(responeData.list);
                     callback(
                         {
                             "recordsTotal": responeData.totalCount,
@@ -161,7 +212,6 @@
      * @param id
      */
     function del(id){
-        alert(id);
         var url = "${ctx}/appPromotionConfig/deleteAppResource";
         $.ajax({
             url: url,
@@ -179,6 +229,65 @@
         });
     };
 
+
+    /**
+     * 关闭弹出层
+     */
+    $(".closeBtn").click(function (thizz) {
+        $("#editDIV").css('display','none');
+    });
+
+    /**
+     * 修改前，加载展示数据
+     * @param rowIndex  记录所在行号
+     */
+    function preEdit(rowIndex) {
+        $("#editDIV").show();
+        var row = $("#tab_resource tr:eq("+rowIndex+")");
+
+        var id,country,appType,appPkg,appName,validstatus,init;
+        var rowData = row.children();
+        id = rowData.eq(0).text();
+        country = rowData.eq(1).text();
+        appType = rowData.eq(2).text();
+        appPkg = rowData.eq(3).text();
+        appName = rowData.eq(4).text();
+        validstatus = rowData.eq(5).text();
+        init = rowData.eq(6).text();
+
+        $("#fm_edit #id").val(id);
+        $("#fm_edit #country").val(country);
+        $("#fm_edit #appType").val(appType);
+        $("#fm_edit #appPkg").val(appPkg);
+        $("#fm_edit #validstatus").val(validstatus);
+        /*只要是修改：缓存状态就需要置为0，以便后续批量初始化*/
+        $("#fm_edit #init").val(0);
+        //$("#fm_edit #init").val(init);
+    }
+
+    /**
+     * 更新/修改
+     */
+    $("#edit").click(function () {
+        var url = "${ctx}/appPromotionConfig/updateAppResource";
+        var data = $("#fm_edit").serializeObject();
+        $.ajax({
+            url: url,
+            type:"post",
+            data:JSON.stringify(data),
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success: function (result) {
+                if(ResponseCode.success === result.resultCode){
+                    alert("修改成功!");
+                    //TODO 刷新数据表格
+                    //$("#tab_resource").DataTable().fnDraw(false);
+                }
+            },
+            error:AJAXerror
+        });
+        return false;
+    });
 
 </script>
 </html>
