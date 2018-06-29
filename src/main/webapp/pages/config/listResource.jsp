@@ -170,7 +170,7 @@
     function fetchData(dataTableData,callback){
         rowIndex = 0;
         var data = $("#fm_resource").serializeObject();
-        data.pageNo = dataTableData.start / dataTableData.length;
+        data.pageNo = dataTableData.start / dataTableData.length + 1;
         data.pageSize = dataTableData.length;
 
         var url = "${ctx}/appPromotionConfig/listResource";
