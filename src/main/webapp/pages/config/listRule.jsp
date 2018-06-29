@@ -2,7 +2,6 @@
 <%@ include file="../common/rootBase.jsp"%>
 <html>
 <head>
-<<<<<<< HEAD
     <title>查询推广规则</title>
 </head>
 <body>
@@ -96,73 +95,33 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody>
-        <td>13</td>
-        <td>GB</td>
-        <td>DEFAULT</td>
-        <td>appType='01' && installed=1</td>
-        <td>1</td>
-        <td>1</td>
-        <td>1</td>
-        <td>3</td>
-        <td>app</td>
-        <td>www.baidu.com</td>
-        <td>com.personalization.call.flash</td>
-        <td>Daily Solitaire</td>
-        <td>Cool incoming call animation, make your caller is unique</td>
-        <td>http://images.uugame.info/fullads/ic_callflash_new.png</td>
-        <td>http://images.uugame.info/fullads/callflash_new.jpg</td>
-        <td>http://images.uugame.info/nativeads/callflash_new.jpg</td>
-        <td>2018-06-22 11:59:31</td>
-        <td>2018-06-22 11:59:31</td>
-        <td>备注</td>
-        <td><button class="update">修改</button><button class="delete">删除</button></td>
-        </tr>
-        </tbody>
     </table>
 </div>
 </body>
 <script>
-    var rules = {
-        country:"required",
-        appPkg:"required",
-        conditions:"required"
-    };
-    var messages = {
-        country: "必录项",
-        appPkg: "必录项",
-        conditions: "必录项"
-    };
-
-    $().ready(function() {
-        // 在键盘按下并释放及提交后验证提交表单
-        $("#fm_rule").validate({
-            rules: rules,
-            messages:messages
-        });
-    });
 
     //指定数据属性,最终展示该属性的value值
     var columns = [
         { "data": "id"},
         { "data": "country" },
-        { "data": "app_pkg"},
+        { "data": "appPkg"},
         { "data": "conditions"},
         { "data": "priority"},
         { "data": "validstatus"},
         { "data": "init"},
-        { "data": "popupTimes"},
-        { "data": "comments"},
-        { "data": "action_type"},
-        { "data": "link_url"},
-        { "data": "package_name"},
+        { "data": "popuptimes"},
+        { "data": "actionType"},
+        { "data": "linkUrl"},
+        { "data": "packageName"},
         { "data": "title"},
         { "data": "message"},
-        { "data": "icon_url"},
-        { "data": "big_image_url"},
-        { "data": "image_native_url"},
-        { "data": "create_time"},
-        { "data": "update_time"}
+        { "data": "iconUrl"},
+        { "data": "bigImageUrl"},
+        { "data": "nativeImageUrl"},
+        { "data": "createTime"},
+        { "data": "updateTime"},
+        { "data": "comments"},
+        { "data": "operate"}
     ];
 
     var options = {
@@ -209,8 +168,10 @@
         fetchData(data, callback);
     };
 
+
     function fetchData(dataTableData,callback){
         var data = $("#fm_rule").serializeObject();
+        console.info(data);
         data.pageNo = dataTableData.start / dataTableData.length;
         data.pageSize = dataTableData.length;
 
@@ -224,8 +185,7 @@
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
                     var responeData = result.resultObj;
-                    //console.info(responeData);
-                    console.info(responeData.list);
+                    // console.info(responeData.list);
                     callback(
                         {
                             "recordsTotal": responeData.totalCount,
@@ -239,12 +199,13 @@
         });
     }
 
-    //触发查询
-    $("#queryRule").click(function () {
-        $('#tab_resource').DataTable(options);
-    });
 
     $().ready(function() {
+        $('#tab_rule').DataTable(options);
+    });
+
+    //触发查询
+    $("#queryRule").click(function () {
         $('#tab_rule').DataTable(options);
     });
 
