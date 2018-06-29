@@ -41,5 +41,12 @@
             });
             return o;
         };
+        
+        
+        function  AJAXerror (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);// 状态码
+            console.log(XMLHttpRequest.readyState);// 状态
+            console.log(textStatus);// 错误信息
+        }
 
     </script>
