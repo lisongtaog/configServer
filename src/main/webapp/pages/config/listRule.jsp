@@ -83,6 +83,84 @@
         <input type="button" value="查询" id="queryRule"/>
     </form>
 </div>
+
+<div id="editDIV" class="float" style="display: none;z-index: 9999;">
+    <button class="closeBtn" style="float: right;">关闭</button>
+    <form id="fm_edit" style="margin:50px 100px;">
+        <label for="id">主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键</label>
+        <input type="text" id="id" name="id" readonly/><br/>
+
+        <label for="country">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</label>
+        <input type="text" id="country" name="country"/><br/>
+        <%--后续读取数据库配置，下拉框展示 --%>
+        <%--<select name="country" id="country">
+            <option value="DEFAULT">默认</option>
+            <option value="US">美国</option>
+            <option value="AU">澳大利亚</option>
+            <option value="CA">加拿大</option>
+            <option value="GB">德国</option>
+        </select>--%>
+        <label for="appPkg">应用包</label>
+        <input id="appPkg" type="text" name="appPkg"/>
+        <br/>
+
+        <label for="conditions">条件&nbsp;&nbsp;</label>
+        <input id="conditions" name="conditions">
+        <br/>
+
+        <label for="priority">优先级</label>
+        <select id="priority" name="priority">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <br/>
+
+        <label for="validstatus">有效状态</label>
+        <select id="validstatus" name="validstatus">
+            <option value="1">有效</option>
+            <option value="0">无效</option>
+        </select><br/>
+
+        <label for="init">缓存状态</label>
+        <input type="text" id="init"  name="init"/>
+        <br/>
+
+        <label for="popuptimes">广告弹出次数</label>
+        <input id="popuptimes" type="text" name="popuptimes"/>
+        <br/>
+
+        <label for="actionType">响应类型</label>
+        <input id="actionType" type="text" name="actionType"/>
+        <br/>
+
+        <label for="linkUrl">推广链接</label>
+        <input id="linkUrl" type="text" name="linkUrl"/><br/>
+
+        <label for="packageName">包名称</label>
+        <input id="packageName" type="text" name="packageName"/><br/>
+
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title"/><br/>
+
+        <label for="message">Message</label>
+        <input id="message" type="text" name="message"/><br/>
+
+        <label for="iconUrl">icon</label>
+        <input id="iconUrl" type="text" name="iconUrl"><br/>
+
+        <label for="bigImageUrl">bigImage</label>
+        <input id="bigImageUrl" type="text" name="bigImageUrl"><br/>
+
+        <label for="nativeImageUrl">nativeImage</label>
+        <input id="nativeImageUrl" type="text" name="nativeImageUrl"><br/>
+
+        <label for="comments">备注</label>
+        <input id="comments" type="text" name="comments"><br/>
+
+        <input type="submit" value="提交" id="edit"/>
+    </form>
+</div>
 <div>
     <table id="tab_rule">
         <thead>
@@ -105,7 +183,6 @@
             <th>nativeImage</th>
             <th>创建时间</th>
             <th>更新时间</th>
-            <th>备注</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -134,7 +211,6 @@
         { "data": "nativeImageUrl"},
         { "data": "createTime"},
         { "data": "updateTime"},
-        { "data": "comments"},
         { "data": "operate"}
     ];
     var rowIndex = 0;
@@ -253,27 +329,80 @@
      */
     function preEdit(rowIndex) {
         $("#editDIV").show();
-        var row = $("#tab_resource tr:eq("+rowIndex+")");
+        var row = $("#tab_rule tr:eq("+rowIndex+")");
 
-        var id,country,appType,appPkg,appName,validstatus,init;
+        var id,country,appPkg,conditions,priority,validstatus,init,popuptimes,actionType,linkUrl,packageName,title,message,iconUrl;
+        var bigImageUrl,nativeImageUrl;
         var rowData = row.children();
         id = rowData.eq(0).text();
         country = rowData.eq(1).text();
-        appType = rowData.eq(2).text();
-        appPkg = rowData.eq(3).text();
-        appName = rowData.eq(4).text();
+        appPkg = rowData.eq(2).text();
+        conditions = rowData.eq(3).text();
+        priority = rowData.eq(4).text();
         validstatus = rowData.eq(5).text();
         init = rowData.eq(6).text();
+        popuptimes = rowData.eq(7).text();
+        actionType = rowData.eq(8).text();
+        linkUrl = rowData.eq(9).text();
+        packageName = rowData.eq(10).text();
+        title = rowData.eq(11).text();
+        message = rowData.eq(12).text();
+        iconUrl = rowData.eq(13).text();
+        bigImageUrl = rowData.eq(14).text();
+        nativeImageUrl = rowData.eq(15).text();
 
         $("#fm_edit #id").val(id);
         $("#fm_edit #country").val(country);
-        $("#fm_edit #appType").val(appType);
         $("#fm_edit #appPkg").val(appPkg);
+        $("#fm_edit #conditions").val(conditions);
+        $("#fm_edit #priority").val(priority);
         $("#fm_edit #validstatus").val(validstatus);
+        $("#fm_edit #init").val(init);
+        $("#fm_edit #popuptimes").val(popuptimes);
+        $("#fm_edit #actionType").val(actionType);
+        $("#fm_edit #linkUrl").val(linkUrl);
+        $("#fm_edit #packageName").val(packageName);
+        $("#fm_edit #title").val(title);
+        $("#fm_edit #message").val(message);
+        $("#fm_edit #iconUrl").val(iconUrl);
+        $("#fm_edit #bigImageUrl").val(bigImageUrl);
+        $("#fm_edit #nativeImageUrl").val(nativeImageUrl);
         /*只要是修改：缓存状态就需要置为0，以便后续批量初始化*/
         $("#fm_edit #init").val(0);
         //$("#fm_edit #init").val(init);
     }
+
+    /**
+     * 关闭弹出层
+     */
+    $(".closeBtn").click(function (thizz) {
+        $("#editDIV").css('display','none');
+    });
+
+
+    /**
+     * 更新/修改
+     */
+    $("#edit").click(function () {
+        var url = "${ctx}/appPromotionConfig/updateAppRule";
+        var data = $("#fm_edit").serializeObject();
+        $.ajax({
+            url: url,
+            type:"post",
+            data:JSON.stringify(data),
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success: function (result) {
+                if(ResponseCode.success === result.resultCode){
+                    alert("修改成功!");
+                    //TODO 刷新数据表格
+                    //$("#tab_resource").DataTable().fnDraw(false);
+                }
+            },
+            error:AJAXerror
+        });
+        return false;
+    });
 
 </script>
 </html>
