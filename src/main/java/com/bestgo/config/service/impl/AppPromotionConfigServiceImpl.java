@@ -381,8 +381,34 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
 
     @Override
     public PageInfo listAppRules(AppPromotionRuleDto ruleDto) {
+        int i = 1;
+        AbstractPageQuery<AppPromotionRuleDto, AppPromotionRuleDto> query = new AbstractPageQuery<AppPromotionRuleDto, AppPromotionRuleDto>() {
+            @Override
+            protected List<AppPromotionRule> doQueryPage(AppPromotionRuleDto condition) {
+                AppPromotionRuleExample example = new AppPromotionRuleExample();
+                AppPromotionRuleExample.Criteria criteria = example.createCriteria();
+                criteria.andValidstatusEqualTo("1");//状态是有效的
+                if(null !=ruleDto && StringUtils.isNotBlank(ruleDto.getCountry())){
+                    criteria.andCountryEqualTo(ruleDto.getCountry());
+                }
+                if(null != ruleDto && StringUtils.isNotBlank(ruleDto.getAppPkg())){
+                    criteria.andAppPkgLike(ruleDto.getAppPkg());
+                }
+                example.setOrderByClause(" country ASC,app_pkg ASC");//根据 app类型升序排列
+                return appPromotionRuleMapper.selectByExample(example);//查询出所有满足条件的数据
+            }
 
-        return null;
+            @Override
+            protected AppPromotionRuleDto beanConvert(Object src) {
+                AppPromotionRuleDto ruleDataDto = beanConverter.convert(src,AppPromotionRuleDto.class);
+                return ruleDataDto;
+            }
+        };
+
+        PageInfo<AppPromotionRuleDto> page = null;
+        page = query.queryPage(ruleDto);
+
+        return page;
     }
 
     @Override

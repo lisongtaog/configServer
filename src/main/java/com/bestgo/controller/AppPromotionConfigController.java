@@ -6,6 +6,7 @@ import com.bestgo.common.dto.ResponseDto;
 import com.bestgo.common.enums.BaseErrorEnum;
 import com.bestgo.config.dto.AppPromotionRuleDto;
 import com.bestgo.config.dto.AppResourceDataDto;
+import com.bestgo.config.entity.AppPromotionRule;
 import com.bestgo.config.service.AppPromotionConfigService;
 import com.bestgo.user.dto.UserDto;
 import org.apache.commons.lang.StringUtils;
@@ -91,7 +92,8 @@ public class AppPromotionConfigController {
         ResponseDto responseDto = ResponseDto.instance(null);
 
         try{
-            appPromotionConfigService.listAppRules(appPromotionRuleDto);
+            PageInfo page = appPromotionConfigService.listAppRules(appPromotionRuleDto);
+            responseDto.setResultObj(page);
         }catch (Exception e){
             e.printStackTrace();
             responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
