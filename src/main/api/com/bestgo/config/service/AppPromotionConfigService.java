@@ -3,8 +3,6 @@ package com.bestgo.config.service;
 import com.bestgo.common.dto.PageInfo;
 import com.bestgo.config.dto.AppPromotionRuleDto;
 import com.bestgo.config.dto.AppResourceDataDto;
-import com.bestgo.config.entity.AppPromotionRule;
-import com.bestgo.config.entity.AppResourceData;
 
 import java.util.List;
 
@@ -72,4 +70,5 @@ public interface AppPromotionConfigService {
     public void deleteResource(int id);
     public void deleteRule(int id);
 
+    int updateAppResource(AppResourceDataDto appResourceDataDto);
 }

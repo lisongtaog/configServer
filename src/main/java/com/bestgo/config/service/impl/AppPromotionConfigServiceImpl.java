@@ -1,7 +1,6 @@
 package com.bestgo.config.service.impl;
 
 import com.bestgo.common.constants.ConfigConstant;
-import com.bestgo.common.dto.BaseQueryConditionDto;
 import com.bestgo.common.dto.PageInfo;
 import com.bestgo.common.service.AbstractPageQuery;
 import com.bestgo.common.service.BeanConverter;
@@ -20,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.krb5.Config;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -431,5 +429,22 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
     @Override
     public void deleteRule(int id) {
         appPromotionRuleMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateAppResource(AppResourceDataDto appResourceDataDto) {
+        AppResourceData oldAppResourceData = appResourceDataMapper.selectByPrimaryKey(appResourceDataDto.getId());
+        AppResourceData appResourceData = new AppResourceData();
+        beanConverter.convert(appResourceDataDto,appResourceData);
+        appResourceData.setAppType(appResourceDataDto.getAppType());
+        appResourceData.setCountry(appResourceDataDto.getCountry());
+        appResourceData.setAppPkg(appResourceDataDto.getAppPkg());
+        appResourceData.setAppId(oldAppResourceData.getAppId());
+        appResourceData.setAppName(oldAppResourceData.getAppName());
+        appResourceData.setInit(oldAppResourceData.getInit());
+        appResourceData.setValidstatus(oldAppResourceData.getValidstatus());
+        appResourceData.setUpdateTime(new Date());
+        appResourceData.setCreateTime(oldAppResourceData.getCreateTime());
+        return appResourceDataMapper.updateByPrimaryKey(appResourceData);
     }
 }

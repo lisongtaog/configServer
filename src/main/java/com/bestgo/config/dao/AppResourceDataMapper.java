@@ -3,9 +3,9 @@ package com.bestgo.config.dao;
 import com.bestgo.config.entity.AppResourceData;
 import com.bestgo.config.entity.AppResourceDataExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 public interface AppResourceDataMapper {
     int countByExample(AppResourceDataExample example);
 

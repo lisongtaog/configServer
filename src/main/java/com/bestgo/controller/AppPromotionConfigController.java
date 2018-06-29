@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Desc: 广告互推 推广服务接口
@@ -167,6 +168,21 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
+    @RequestMapping(value = "/deleteRule", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResponseDto deleteRule(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
+
+        try{
+            appPromotionConfigService.deleteRule(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
     @RequestMapping(value = "/addAppResource", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDto addAppResource(@RequestBody AppResourceDataDto appResourceDataDto){
@@ -182,14 +198,15 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
-
-    @RequestMapping(value = "/deleteResource", method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/updateAppResource", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto deleteResource(@RequestParam(value = "id") int id){
+    public ResponseDto updateAppResource(@RequestBody AppResourceDataDto appResourceDataDto){
         ResponseDto responseDto = ResponseDto.instance(null);
-
         try{
-            appPromotionConfigService.deleteResource(id);
+            Integer ret = appPromotionConfigService.updateAppResource(appResourceDataDto);
+            if (ret != null) {
+                responseDto.setResultMsg("更新成功！");
+            }
         }catch (Exception e){
             e.printStackTrace();
             responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
@@ -198,13 +215,13 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
-    @RequestMapping(value = "/deleteRule", method = {RequestMethod.POST,RequestMethod.GET})
-    @ResponseBody
-    public ResponseDto deleteRule(@RequestParam(value = "id") int id){
-        ResponseDto responseDto = ResponseDto.instance(null);
 
+    @RequestMapping(value = "/deleteAppResource", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public ResponseDto deleteResource(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
         try{
-            appPromotionConfigService.deleteRule(id);
+            appPromotionConfigService.deleteResource(id);
         }catch (Exception e){
             e.printStackTrace();
             responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
