@@ -436,9 +436,9 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         AppResourceData oldAppResourceData = appResourceDataMapper.selectByPrimaryKey(appResourceDataDto.getId());
         AppResourceData appResourceData = new AppResourceData();
         beanConverter.convert(appResourceDataDto,appResourceData);
-        appResourceData.setAppType(appResourceDataDto.getAppType());
-        appResourceData.setCountry(appResourceDataDto.getCountry());
-        appResourceData.setAppPkg(appResourceDataDto.getAppPkg());
+//        appResourceData.setAppType(appResourceDataDto.getAppType());
+//        appResourceData.setCountry(appResourceDataDto.getCountry());
+//        appResourceData.setAppPkg(appResourceDataDto.getAppPkg());
         appResourceData.setAppId(oldAppResourceData.getAppId());
         appResourceData.setAppName(oldAppResourceData.getAppName());
         appResourceData.setInit(oldAppResourceData.getInit());
@@ -446,5 +446,15 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         appResourceData.setUpdateTime(new Date());
         appResourceData.setCreateTime(oldAppResourceData.getCreateTime());
         return appResourceDataMapper.updateByPrimaryKey(appResourceData);
+    }
+
+    @Override
+    public int updateAppRule(AppPromotionRuleDto appPromotionRuleDto) {
+        AppPromotionRule oldAppPromotionRule = appPromotionRuleMapper.selectByPrimaryKey(appPromotionRuleDto.getId());
+        AppPromotionRule appPromotionRule = new AppPromotionRule();
+        beanConverter.convert(appPromotionRuleDto,appPromotionRule);
+        appPromotionRule.setCreateTime(oldAppPromotionRule.getCreateTime());
+        appPromotionRule.setUpdateTime(new Date());
+        return appPromotionRuleMapper.updateByPrimaryKey(appPromotionRule);
     }
 }
