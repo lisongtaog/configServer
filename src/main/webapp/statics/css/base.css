@@ -38,3 +38,15 @@ table th{
 table td{
     border:1px solid #cccccc;
 }
+
+
+div.float{
+    width:50%;
+    height:80%;
+    background:transparent;
+    background:#f0f0f0;
+    border-radius:8px;
+    position: fixed;
+    margin:auto;left:0; right:0; top:0; bottom:0;
+    z-index: 999;
+}

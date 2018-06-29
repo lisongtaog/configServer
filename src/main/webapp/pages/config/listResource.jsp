@@ -36,6 +36,55 @@
         <input type="button" value="查询" id="submit"/>
     </form>
 </div>
+
+<div id="editDIV" class="float" style="display: none;z-index: 9999;">
+    <button class="closeBtn" style="float: right;">关闭</button>
+    <form id="fm_edit" style="margin:50px 100px;">
+        <label for="id">主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键</label>
+        <input type="text" id="id" name="id"/><br/>
+
+
+        <label for="country">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</label>
+        <input type="text" id="country" name="country"/><br/>
+        <%--后续读取数据库配置，下拉框展示 --%>
+        <%--<select name="country" id="country">
+            <option value="DEFAULT">默认</option>
+            <option value="US">美国</option>
+            <option value="AU">澳大利亚</option>
+            <option value="CA">加拿大</option>
+            <option value="GB">德国</option>
+        </select>--%>
+        <label for="appType">应用类型</label>
+        <select name="appType" id="appType">
+            <option value="01">游戏</option>
+            <option value="02">CallFlash</option>
+            <option value="03">杀毒</option>
+            <option value="04">计步器</option>
+            <option value="05">翻译</option>
+            <option value="06">voip</option>
+            <option value="07">VPN</option>
+            <option value="08">喝水宝</option>
+        </select><br/>
+
+        <label for="appPkg">资源包&nbsp;&nbsp;</label>
+        <input id="appPkg" name="appPkg"></input><br/>
+
+        <label for="validstatus">有效状态</label>
+        <select id="validstatus" name="validstatus">
+            <option value="1">有效</option>
+            <option value="0">无效</option>
+        </select><br/>
+
+        <label for="init">初始化状态</label>
+        <select id="init" name="init">
+            <option value="1">已初始化</option>
+            <option value="0">未初始化</option>
+        </select><br/><br/>
+
+        <input type="submit" value="提交" id="submit"/>
+    </form>
+</div>
+
 <div>
     <table id="tab_resource">
         <thead>
@@ -101,7 +150,7 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<button value="'+row.id+'">编辑</button>&nbsp;&nbsp;'
+                    var html ='<button onclick="edit('+ row.id + ')">编辑</button>&nbsp;&nbsp;'
                         +'<button onclick="del('+ row.id + ')">删除</button>';
                     return html;
                 }
@@ -179,6 +228,38 @@
         });
     };
 
+    /**
+     * 修改
+     * @param thizz
+     */
+    function edit(id) {
+        $("#editDIV").show();
+
+        //查询详情展示，然后再修改更新；
+        var url = "";
+        $.ajax({
+            url: url,
+            type:"post",
+            data:"id="+ id,
+            dataType:"json",
+            success: function (result) {
+                if(ResponseCode.success === result.resultCode){
+                    alert("删除成功!");
+                    //TODO 刷新数据表格
+                    //$("#tab_resource").DataTable().fnDraw(false);
+                }
+            },
+            error:AJAXerror
+        });
+        //console.info(rowData);
+    }
+
+    /**
+     * 关闭弹出层
+     */
+    $(".closeBtn").click(function (thizz) {
+        $("#editDIV").css('display','none');
+    });
 
 </script>
 </html>
