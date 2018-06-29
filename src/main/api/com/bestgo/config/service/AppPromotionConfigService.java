@@ -71,4 +71,6 @@ public interface AppPromotionConfigService {
     public void deleteRule(int id);
 
     int updateAppResource(AppResourceDataDto appResourceDataDto);
+
+    int updateAppRule(AppPromotionRuleDto appPromotionRuleDto);
 }

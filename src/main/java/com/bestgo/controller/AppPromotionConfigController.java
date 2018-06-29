@@ -169,6 +169,23 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
+    @RequestMapping(value = "/updateAppRule", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto updateAppRule(@RequestBody AppPromotionRuleDto appPromotionRuleDto){
+        ResponseDto responseDto = ResponseDto.instance(null);
+        try{
+            int ret = appPromotionConfigService.updateAppRule(appPromotionRuleDto);
+            if (ret != 0) {
+                responseDto.setResultMsg("更新成功！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return  responseDto;
+    }
+
     @RequestMapping(value = "/deleteRule", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDto deleteRule(@RequestParam(value = "id") int id){
