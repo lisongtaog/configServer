@@ -3,6 +3,20 @@
 <html>
 <head>
     <title>查询推广规则</title>
+    <style>
+        table td{
+            max-width:43em;
+            word-wrap:break-word;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            overflow:hidden;
+        }
+        table td:hover{
+            white-space:normal;
+            overflow:auto;
+        }
+
+    </style>
 </head>
 <body>
 <div>
@@ -76,7 +90,7 @@
             <th>ID</th>
             <th>国家</th>
             <th>应用包</th>
-            <th>匹配规则条件</th>
+            <th>条件</th>
             <th>优先级</th>
             <th>有效状态</th>
             <th>缓存状态</th>
@@ -86,9 +100,9 @@
             <th>包名称</th>
             <th>Tittle</th>
             <th>Message</th>
-            <th>icon_url</th>
-            <th>big_image_url</th>
-            <th>native_image_url</th>
+            <th>icon</th>
+            <th>bigImage</th>
+            <th>nativeImage</th>
             <th>创建时间</th>
             <th>更新时间</th>
             <th>备注</th>
