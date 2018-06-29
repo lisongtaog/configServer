@@ -53,15 +53,17 @@
         </thead>
         <tbody>
         <tr>
-            <td>ID</td>
-            <td>国家</td>
-            <td>类型</td>
-            <td>应用包</td>
-            <td>包名称</td>
-            <td>有效状态</td>
-            <td>缓存状态</td>
-            <td>创建时间</td>
-            <td>更新时间</td>
+            <td>1572</td>
+            <td>qweq</td>
+            <td>游戏</td>
+            <td>com.majikapri.hydrobalance</td>
+            <td>zhifubao</td>
+            <td>1(不修改)</td>
+            <td>0(不修改)</td>
+            <td>2018-06-28 19:38:48(不修改)</td>
+            <td>2018-06-28 19:38:48(不修改)</td>
+            <td><button class="update">修改</button></td>
+            <td><button class="delete">删除</button></td>
         </tr>
         </tbody>
         
@@ -81,6 +83,35 @@
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
                     console.info(result.resultObj);
+                }
+            },
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+                // 状态码
+                console.log(XMLHttpRequest.status);
+                // 状态
+                console.log(XMLHttpRequest.readyState);
+                // 错误信息
+                console.log(textStatus);
+            }
+        });
+        return false;
+    });
+
+    $(".delete").click(function () {
+        var id = 1572;
+        var url = "${ctx}/appPromotionConfig/deleteAppResource?id=" + id;
+        $.ajax({
+            url: url,
+            type:"get",
+            data:JSON.stringify(id),
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success: function (result) {
+                if(ResponseCode.success === result.resultCode){
+                    alert("删除成功");
+                    document.getElementById("#fm_resource").reset();
+                }else {
+                    alert("删除失败");
                 }
             },
             error:function (XMLHttpRequest, textStatus, errorThrown) {
