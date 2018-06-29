@@ -33,7 +33,7 @@
         <!--前端解析后的资源信息-->
         <input id="appPkg" name="appPkg" />
 
-        <input type="submit" value="查询" id="submit"/>
+        <input type="button" value="查询" id="submit"/>
     </form>
 </div>
 <div>
@@ -49,28 +49,68 @@
                 <th>缓存状态</th>
                 <th>创建时间</th>
                 <th>更新时间</th>
+                <th>操作</th>
             </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td>ID</td>
-            <td>国家</td>
-            <td>类型</td>
-            <td>应用包</td>
-            <td>包名称</td>
-            <td>有效状态</td>
-            <td>缓存状态</td>
-            <td>创建时间</td>
-            <td>更新时间</td>
-        </tr>
-        </tbody>
-        
     </table>
 </div>
 </body>
 <script>
-    $("#submit").click(function () {
+
+    //指定数据属性,最终展示该属性的value值
+    var columns = [
+        { "data": "id"},
+        { "data": "country" },
+        { "data": "appType"},
+        { "data": "appPkg"},
+        { "data": "appName"},
+        { "data": "validstatus"},
+        { "data": "init"},
+        { "data": "createTime"},
+        { "data": "updateTime"},
+        { "data": "opearate"}
+    ];
+
+    var options = {
+        "searching": false,// 是否允许检索
+        "ordering":false,
+        "info": true,// 是否显示情报 就是"当前显示1/100记录"这个信息
+        "serverSide": true,//服务器端分页
+        "paging": true,// 是否允许翻页，设成false，翻页按钮不显示
+        "scrollX": false,// 水平滚动条
+        "scrollY": false,// 垂直滚动条
+        "lengthMenu": [1,10, 25, 50],// 件数选择下拉框内容
+        "pageLength": 10,// 每页的初期件数 用户可以操作lengthMenu上的值覆盖
+        //翻页按钮样式
+        // numbers:数字;// simple:前一页，后一页;// simple_numbers:前一页，后一页，数字;// full:第一页，前一页，后一页，最后页
+        //full_numbers:第一页，前一页，后一页，最后页，数字;//first_last_numbers:第一页，最后页，数字
+        "pagingType": "full_numbers",
+        // 行样式应用 指定多个的话，第一行tr的class为strip1，第二行为strip2，第三行为strip3.
+        // 第四行以后又开始从strip1循环。。。 如果想指定成斑马条状，这里的class必须指定为2个。
+//        "stripeClasses": ['strip1', 'strip2'],
+        //"autoWidth": true,// 自动列宽
+        "processing": true,// 是否表示 "processing" 加载中的信息，这个信息可以修改
+        "destroy": true,// 每次创建是否销毁以前的DataTable,默认false
+        "select": true,
+        "dom": "Blfrtip",
+        "fnCreatedRow":function(nRow, aData, iDataIndex){
+            //console.info(aData);//
+        }
+    };
+
+    options.columns = columns;
+
+    options.ajax = function(data, callback, settings){
+        //console.info(callback);
+        //console.info(settings);
+        fetchData(data, callback);
+    };
+
+    function fetchData(dataTableData,callback){
         var data = $("#fm_resource").serializeObject();
+        data.pageNo = dataTableData.start / dataTableData.length;
+        data.pageSize = dataTableData.length;
+
         var url = "${ctx}/appPromotionConfig/listResource";
         $.ajax({
             url: url,
@@ -80,19 +120,35 @@
             dataType:"json",
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
-                    console.info(result.resultObj);
+                    var responeData = result.resultObj;
+                    //console.info(responeData);
+                    console.info(responeData.list);
+                    callback(
+                        {
+                            "recordsTotal": responeData.totalCount,
+                            "recordsFiltered": responeData.totalCount,
+                            "data": responeData.list
+                        }
+                    );
                 }
             },
             error:function (XMLHttpRequest, textStatus, errorThrown) {
-                // 状态码
-                console.log(XMLHttpRequest.status);
-                // 状态
-                console.log(XMLHttpRequest.readyState);
-                // 错误信息
-                console.log(textStatus);
+                console.log(XMLHttpRequest.status);// 状态码
+                console.log(XMLHttpRequest.readyState);// 状态
+                console.log(textStatus);// 错误信息
             }
         });
-        return false;
+    }
+
+    $().ready(function() {
+        $('#tab_resource').DataTable(options);
     });
+
+    //触发查询
+    $("#submit").click(function () {
+        $('#tab_resource').DataTable(options);
+    });
+
+
 </script>
 </html>
