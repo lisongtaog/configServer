@@ -73,10 +73,10 @@
 		</table>
 
 		<!-- APP资源信息表 -->
-		<table tableName="app_resource_data"  schema=""  enableCountByExample="true"
+		<!--<table tableName="app_resource_data"  schema=""  enableCountByExample="true"
 			   enableUpdateByExample="false" enableDeleteByExample="false"
 			   enableSelectByExample="true" selectByExampleQueryId="true">
-		</table>
+		</table>-->
 			
 	</context>
 </generatorConfiguration>

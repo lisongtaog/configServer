@@ -98,7 +98,13 @@
      * @returns {*}
      */
     function parseResource(jsonStr) {
-        var resource = $.parseJSON(jsonStr);
+        var resource = [];
+        try{
+            resource = $.parseJSON(jsonStr);
+        }catch (e){
+            console.info("parse resource app to json array failed ! by defaule:regard the single value as a APP resource");
+            resource.push(jsonStr);
+        }
         return resource;
     }
 

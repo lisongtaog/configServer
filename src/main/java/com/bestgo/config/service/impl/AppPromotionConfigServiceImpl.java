@@ -164,6 +164,7 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         Map action = null;
         for(AppPromotionRule rule : result){
             itemRule = new HashMap();
+            itemRule.put("id",rule.getId());
             itemRule.put("priority",rule.getPriority());
             itemRule.put("condition",rule.getConditions());
 

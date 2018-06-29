@@ -33,7 +33,7 @@
         <!--前端解析后的资源信息-->
         <input id="appPkg" name="appPkg" />
 
-        <input type="submit" value="查询" id="submit"/>
+        <input type="button" value="查询" id="submit"/>
     </form>
 </div>
 <div>
@@ -49,21 +49,20 @@
                 <th>缓存状态</th>
                 <th>创建时间</th>
                 <th>更新时间</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
         <tr>
-            <td>1572</td>
-            <td>qweq</td>
-            <td>游戏</td>
-            <td>com.majikapri.hydrobalance</td>
-            <td>zhifubao</td>
-            <td>1(不修改)</td>
-            <td>0(不修改)</td>
-            <td>2018-06-28 19:38:48(不修改)</td>
-            <td>2018-06-28 19:38:48(不修改)</td>
-            <td><button class="update">修改</button></td>
-            <td><button class="delete">删除</button></td>
+            <td>ID</td>
+            <td>国家</td>
+            <td>类型</td>
+            <td>应用包</td>
+            <td>包名称</td>
+            <td>有效状态</td>
+            <td>缓存状态</td>
+            <td>创建时间</td>
+            <td>更新时间</td>
         </tr>
         </tbody>
         
@@ -82,19 +81,33 @@
             dataType:"json",
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
-                    console.info(result.resultObj);
+                    var responeData = result.resultObj;
+                    //console.info(responeData);
+                    console.info(responeData.list);
+                    callback(
+                        {
+                            "recordsTotal": responeData.totalCount,
+                            "recordsFiltered": responeData.totalCount,
+                            "data": responeData.list
+                        }
+                    );
                 }
             },
             error:function (XMLHttpRequest, textStatus, errorThrown) {
-                // 状态码
-                console.log(XMLHttpRequest.status);
-                // 状态
-                console.log(XMLHttpRequest.readyState);
-                // 错误信息
-                console.log(textStatus);
+                console.log(XMLHttpRequest.status);// 状态码
+                console.log(XMLHttpRequest.readyState);// 状态
+                console.log(textStatus);// 错误信息
             }
         });
-        return false;
+    }
+
+    $().ready(function() {
+        $('#tab_resource').DataTable(options);
+    });
+
+    //触发查询
+    $("#submit").click(function () {
+        $('#tab_resource').DataTable(options);
     });
 
     $(".delete").click(function () {
