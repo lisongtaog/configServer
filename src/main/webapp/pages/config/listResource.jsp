@@ -145,6 +145,9 @@
         "fnCreatedRow":function(nRow, aData, iDataIndex){
             //console.info(aData);//
         },
+        "fnCreatedRow":function(nRow, aData, iDataIndex){
+            //console.info(aData);//
+        },
         "columnDefs":[
             {//倒数第一列
                 "targets":-1,
@@ -154,7 +157,7 @@
                         +'<button onclick="del('+ row.id + ')">删除</button>';
                     return html;
                 }
-            },
+            }
         ]
     };
 
