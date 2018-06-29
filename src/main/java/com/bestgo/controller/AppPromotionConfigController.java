@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Desc: 广告互推 推广服务接口
@@ -168,7 +167,7 @@ public class AppPromotionConfigController {
         return  responseDto;
     }
 
-    @RequestMapping(value = "/deleteRule", method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/deleteRule", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDto deleteRule(@RequestParam(value = "id") int id){
         ResponseDto responseDto = ResponseDto.instance(null);
@@ -216,7 +215,7 @@ public class AppPromotionConfigController {
     }
 
 
-    @RequestMapping(value = "/deleteAppResource", method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/deleteAppResource", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDto deleteResource(@RequestParam(value = "id") int id){
         ResponseDto responseDto = ResponseDto.instance(null);
