@@ -24,22 +24,31 @@ form input{
     margin: 2px 2px;
 }
 table{
+    width: 100% !important;
     table-layout:fixed;
     empty-cells:show;
     border-collapse: collapse;
     margin:0 auto;
 }
-table th|td{
-    height:20px;
-}
 table th{
-    border:1px solid #a7d1fd;
-}
-table td{
-    border:1px solid #cccccc;
+    border: 1px solid #c5c5c5;
 }
 
+/**表格单元格 文本过长处理 - begin*/
+table.myof td{
+    max-width:50em;
+    word-wrap:break-word;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+table.myof td:hover{
+    white-space:normal;
+    overflow:auto;
+}
+/**表格单元格 文本过长处理 - begin*/
 
+/**浮动弹出层*/
 div.float{
     width:50%;
     height:80%;

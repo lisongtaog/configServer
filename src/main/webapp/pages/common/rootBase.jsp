@@ -49,4 +49,10 @@
             console.log(textStatus);// 错误信息
         }
 
+        //jquery datatable 异常事件处理
+        //$.fn.dataTable.ext.errMode = 'none';
+        function dataTableError(e, settings, techNote, message){
+            console.log( 'An error has been reported by DataTables: ', message );
+        }
+
     </script>

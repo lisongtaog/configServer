@@ -3,20 +3,6 @@
 <html>
 <head>
     <title>查询推广规则</title>
-    <style>
-        table td{
-            max-width:43em;
-            word-wrap:break-word;
-            text-overflow:ellipsis;
-            white-space:nowrap;
-            overflow:hidden;
-        }
-        table td:hover{
-            white-space:normal;
-            overflow:auto;
-        }
-
-    </style>
 </head>
 <body>
 <div>
@@ -162,7 +148,7 @@
     </form>
 </div>
 <div>
-    <table id="tab_rule">
+    <table id="tab_rule" class="cell-border stripe myof">
         <thead>
         <tr>
             <th>ID</th>
@@ -222,7 +208,7 @@
         "paging": true,// 是否允许翻页，设成false，翻页按钮不显示
         "scrollX": false,// 水平滚动条
         "scrollY": false,// 垂直滚动条
-        "lengthMenu": [1,10, 25, 50],// 件数选择下拉框内容
+        "lengthMenu": [10, 25, 50],// 件数选择下拉框内容
         "pageLength": 10,// 每页的初期件数 用户可以操作lengthMenu上的值覆盖
         //翻页按钮样式
         // numbers:数字;// simple:前一页，后一页;// simple_numbers:前一页，后一页，数字;// full:第一页，前一页，后一页，最后页
@@ -244,10 +230,14 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<button onclick="preEdit('+ ++rowIndex + ')">编辑</button>&nbsp;&nbsp;'
-                        +'<button onclick="del('+ row.id + ')">删除</button>';
+                    var html ='<a href="javascript:void(0);retutn false;" onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);retutn false;" onclick="del('+ row.id + ')">删除</a>';
                     return html;
                 }
+            },
+            {
+                "visible": false,
+                "targets": [5,6,7,-2,-3]
             }
         ]
     };

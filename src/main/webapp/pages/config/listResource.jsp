@@ -86,7 +86,7 @@
 </div>
 
 <div>
-    <table id="tab_resource">
+    <table id="tab_resource" class="cell-border stripe myof">
         <thead>
             <tr>
                 <th>ID</th>
@@ -108,13 +108,13 @@
 
     //指定数据属性,最终展示该属性的value值
     var columns = [
-        { "data": "id"},
+        { "data": "id","orderable":false},
         { "data": "country" },
         { "data": "appType"},
         { "data": "appPkg"},
         { "data": "appName"},
-        { "data": "validstatus"},
-        { "data": "init"},
+        { "data": "validstatus","orderable":false},
+        { "data": "init","orderable":false},
         { "data": "createTime"},
         { "data": "updateTime"},
         { "data": "operate"}
@@ -128,7 +128,7 @@
         "paging": true,// 是否允许翻页，设成false，翻页按钮不显示
         "scrollX": false,// 水平滚动条
         "scrollY": false,// 垂直滚动条
-        "lengthMenu": [1,10, 25, 50],// 件数选择下拉框内容
+        "lengthMenu": [10, 25, 50],// 件数选择下拉框内容
         "pageLength": 10,// 每页的初期件数 用户可以操作lengthMenu上的值覆盖
         //翻页按钮样式
         // numbers:数字;// simple:前一页，后一页;// simple_numbers:前一页，后一页，数字;// full:第一页，前一页，后一页，最后页
@@ -136,7 +136,7 @@
         "pagingType": "full_numbers",
         // 行样式应用 指定多个的话，第一行tr的class为strip1，第二行为strip2，第三行为strip3.
         // 第四行以后又开始从strip1循环。。。 如果想指定成斑马条状，这里的class必须指定为2个。
-//        "stripeClasses": ['strip1', 'strip2'],
+        "stripeClasses": ['odd', 'even'],
         //"autoWidth": true,// 自动列宽
         "processing": true,// 是否表示 "processing" 加载中的信息，这个信息可以修改
         "destroy": true,// 每次创建是否销毁以前的DataTable,默认false
@@ -153,8 +153,8 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<button onclick="preEdit('+ ++rowIndex + ')">编辑</button>&nbsp;&nbsp;'
-                        +'<button onclick="del('+ row.id + ')">删除</button>';
+                    var html ='<a href="javascript:void(0);retutn false;"  onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);retutn false;"  onclick="del('+ row.id + ')">删除</a>';
                     return html;
                 }
             }
@@ -162,6 +162,7 @@
     };
 
     options.columns = columns;
+    options.order = [[1,"asc"],[2,"asc"]]; //默认：根据国家、应用类型 升序排序
 
     options.ajax = function(data, callback, settings){
         //console.info(callback);
@@ -171,10 +172,20 @@
 
     //从后台获取分页数据
     function fetchData(dataTableData,callback){
+        //console.info(dataTableData);
         rowIndex = 0;
         var data = $("#fm_resource").serializeObject();
         data.pageNo = dataTableData.start / dataTableData.length + 1;
         data.pageSize = dataTableData.length;
+        /*//排序处理 begin
+        var orderCause = "";
+        $.each(dataTableData.order,function(index,item){
+            orderCause += "," +columns[item.column].data + " " + item.dir
+        });
+        orderCause = orderCause.slice(1);
+        data.orderByClause = orderCause;
+        //排序处理 end
+        */
 
         var url = "${ctx}/appPromotionConfig/listResource";
         $.ajax({
