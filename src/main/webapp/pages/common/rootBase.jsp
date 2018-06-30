@@ -19,13 +19,14 @@
 
 
     <script src="${ctx}/statics/js/jquery-3.3.1.min.js"></script>
-    <%--<script src="${ctx}/statics/js/jquery.form.js"></script>--%>
-    <%--<script src="${ctx}/statics/js/jquery-validation/jquery.validate.min.js"></script>--%>
+    <script src="${ctx}/statics/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="${ctx}/statics/js/jquery.form.js"></script>
+    <script src="${ctx}/statics/js/jquery-validation/jquery.validate.min.js"></script>
     <link rel="stylesheet" href="${ctx}/statics/js/datatables/datatables.min.css" />
     <script src="${ctx}/statics/js/datatables/datatables.min.js"></script>
+
     <script src="${ctx}/statics/bootstrap/js/bootstrap.min.js"></script>
     <script src="${ctx}/statics/bootstrap/js/bootstrap-datetimepicker.js"></script>
-    <script src="${ctx}/statics/js/jquery-ui/jquery-ui.min.js"></script>
 
     <script type="text/javascript">
         var contextRootPath = "${ctx}";
