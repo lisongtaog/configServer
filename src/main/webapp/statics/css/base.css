@@ -34,28 +34,18 @@ table th{
     border: 1px solid #c5c5c5;
 }
 
-/**表格单元格 文本过长处理 - begin*/
-table.myof td{
-    max-width:50em;
+/*table cell overflow - begin*/
+table.dataTable tr td{
+    min-width: 20px;
+    max-width:280px;
     word-wrap:break-word;
     text-overflow:ellipsis;
     white-space:nowrap;
     overflow:hidden;
 }
-table.myof td:hover{
+table.dataTable tr td:hover{
     white-space:normal;
     overflow:auto;
 }
-/**表格单元格 文本过长处理 - begin*/
+/*table cell overflow - end*/
 
-/**浮动弹出层*/
-div.float{
-    width:50%;
-    height:80%;
-    background:transparent;
-    background:#f0f0f0;
-    border-radius:8px;
-    position: fixed;
-    margin:auto;left:0; right:0; top:0; bottom:0;
-    z-index: 999;
-}

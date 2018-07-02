@@ -4,9 +4,11 @@
     <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
     <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+    <%--版本号，防止css、js缓存；定义此版本号--%>
+    <c:set var="version" value="1.1"/>
 
     <%--最根本的jsp页面，用于定义引入基本的js和css--%>
-    <link rel="stylesheet" href="${ctx}/statics/css/base.css" />
+    <link rel="stylesheet" href="${ctx}/statics/css/base.css?v=${version}" />
     <script type="text/javascript" language="JavaScript" src="${ctx}/statics/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/statics/js/jquery-ui/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="${ctx}/statics/js/jquery-ui/jquery-ui.min.css"/>

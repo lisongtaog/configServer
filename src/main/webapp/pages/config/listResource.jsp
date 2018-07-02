@@ -118,7 +118,7 @@
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
                 </button>
                 <button type="button" id="btn_edit" class="btn btn-primary" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>提交
                 </button>
                 <%--<input type="submit" value="提交" id="" class="btn btn-primary"/>--%>
             </div>
@@ -127,7 +127,7 @@
 </div>
 
 <div>
-    <table id="tab_resource" class="cell-border stripe myof">
+    <table id="tab_resource" class="cell-border stripe">
         <thead>
             <tr>
                 <th>ID</th>
@@ -135,8 +135,8 @@
                 <th>类型</th>
                 <th>应用包</th>
                 <th>包名称</th>
-                <th>有效状态</th>
-                <th>缓存状态</th>
+                <th>有效<br/>状态</th>
+                <th>缓存<br/>状态</th>
                 <th>创建时间</th>
                 <th>更新时间</th>
                 <th>操作</th>
@@ -149,25 +149,24 @@
 
     //指定数据属性,最终展示该属性的value值
     var columns = [
-        { "data": "id","orderable":false},
-        { "data": "country" },
-        { "data": "appType"},
+        { "data": "id","orderable":false,"width":"20px"},
+        { "data": "country","width":"60px"},
+        { "data": "appType","width":"35px"},
         { "data": "appPkg"},
         { "data": "appName"},
-        { "data": "validstatus","orderable":false},
-        { "data": "init","orderable":false},
-        { "data": "createTime"},
-        { "data": "updateTime"},
-        { "data": "operate"}
+        { "data": "validstatus","orderable":false,"width":"35px"},
+        { "data": "init","orderable":false,"width":"35px"},
+        { "data": "createTime","width":"150px"},
+        { "data": "updateTime","width":"150px"},
+        { "data": "operate","width":"35px"}
     ];
-    var rowIndex = 0;
     var options = {
         "searching": false,// 是否允许检索
         "ordering":false,
         "info": true,// 是否显示情报 就是"当前显示1/100记录"这个信息
         "serverSide": true,//服务器端分页
         "paging": true,// 是否允许翻页，设成false，翻页按钮不显示
-        "scrollX": false,// 水平滚动条
+        "scrollX": true,// 水平滚动条
         "scrollY": false,// 垂直滚动条
         "lengthMenu": [10, 25, 50],// 件数选择下拉框内容
         "pageLength": 10,// 每页的初期件数 用户可以操作lengthMenu上的值覆盖
@@ -194,10 +193,14 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<a href="javascript:void(0);"  onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
-                        +'<a href="javascript:void(0);"  onclick="del('+ row.id + ')">删除</a>';
+                    var html ='<a href="javascript:void(0);" class="link_modify glyphicon glyphicon-pencil" onclick="preEdit('+ row.id + ')"></a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);" class="link_delete glyphicon glyphicon-remove" onclick="del('+ row.id + ')"></a>';
                     return html;
                 }
+            },
+            {
+                "visible": false,
+                "targets": []
             }
         ]
     };
@@ -214,7 +217,6 @@
     //从后台获取分页数据
     function fetchData(dataTableData,callback){
         //console.info(dataTableData);
-        rowIndex = 0;
         var data = $("#fm_resource").serializeObject();
         data.pageNo = dataTableData.start / dataTableData.length + 1;
         data.pageSize = dataTableData.length;
@@ -267,7 +269,33 @@
      * @param id
      */
     function del(id){
-        var url = "${ctx}/appPromotionConfig/deleteAppResource";
+        var poupMsg = confirm("确定删除吗？");
+        if(poupMsg){
+            var url = "${ctx}/appPromotionConfig/deleteAppResource";
+            $.ajax({
+                url: url,
+                type:"post",
+                data:"id="+ id,
+                dataType:"json",
+                success: function (result) {
+                    if(ResponseCode.success === result.resultCode){
+                        alert("删除成功!");
+                        //TODO 刷新数据表格
+                        //$("#tab_resource").DataTable().fnDraw(false);
+                    }
+                },
+                error:AJAXerror
+            });
+        }
+    };
+
+    /**
+     * 修改前，加载展示数据
+     * @param id  资源id
+     */
+    function preEdit(id) {
+        $('#editDIV').modal();
+        var url = "${ctx}/appPromotionConfig/detailResource";
         $.ajax({
             url: url,
             type:"post",
@@ -275,50 +303,21 @@
             dataType:"json",
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
-                    alert("删除成功!");
+                    var resource = result.resultObj;
+
+                    $("#fm_edit #id").val(resource.id);
+                    $("#fm_edit #country").val(resource.country);
+                    $("#fm_edit #appType").val(resource.appType);
+                    $("#fm_edit #appPkg").val(resource.appPkg);
+                    $("#fm_edit #validstatus").val(resource.validstatus);
+                    /*只要是修改：缓存状态就需要置为0，以便后续批量初始化*/
+                    $("#fm_edit #init").val(0);
                     //TODO 刷新数据表格
                     //$("#tab_resource").DataTable().fnDraw(false);
                 }
             },
             error:AJAXerror
         });
-    };
-
-
-    /**
-     * 关闭弹出层
-     */
-    $(".closeBtn").click(function (thizz) {
-        $("#editDIV").css('display','none');
-    });
-
-    /**
-     * 修改前，加载展示数据
-     * @param rowIndex  记录所在行号
-     */
-    function preEdit(rowIndex) {
-        //$("#editDIV").show();
-        $('#editDIV').modal();
-        var row = $("#tab_resource tr:eq("+rowIndex+")");
-
-        var id,country,appType,appPkg,appName,validstatus,init;
-        var rowData = row.children();
-        id = rowData.eq(0).text();
-        country = rowData.eq(1).text();
-        appType = rowData.eq(2).text();
-        appPkg = rowData.eq(3).text();
-        appName = rowData.eq(4).text();
-        validstatus = rowData.eq(5).text();
-        init = rowData.eq(6).text();
-
-        $("#fm_edit #id").val(id);
-        $("#fm_edit #country").val(country);
-        $("#fm_edit #appType").val(appType);
-        $("#fm_edit #appPkg").val(appPkg);
-        $("#fm_edit #validstatus").val(validstatus);
-        /*只要是修改：缓存状态就需要置为0，以便后续批量初始化*/
-        $("#fm_edit #init").val(0);
-        //$("#fm_edit #init").val(init);
     }
 
     /**

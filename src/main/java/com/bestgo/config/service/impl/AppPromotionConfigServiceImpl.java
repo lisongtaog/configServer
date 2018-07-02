@@ -486,4 +486,16 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         appPromotionRule.setUpdateTime(new Date());
         return appPromotionRuleMapper.updateByPrimaryKey(appPromotionRule);
     }
+
+    @Override
+    public AppPromotionRuleDto detailAppRule(int id) {
+        AppPromotionRule data = appPromotionRuleMapper.selectByPrimaryKey(id);
+        return beanConverter.convert(data,AppPromotionRuleDto.class);
+    }
+
+    @Override
+    public AppResourceDataDto detailAppResource(int id) {
+        AppResourceData data = appResourceDataMapper.selectByPrimaryKey(id);
+        return beanConverter.convert(data,AppResourceDataDto.class);
+    }
 }

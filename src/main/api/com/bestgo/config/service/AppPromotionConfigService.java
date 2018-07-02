@@ -67,6 +67,21 @@ public interface AppPromotionConfigService {
      */
     public PageInfo listAppResources(AppResourceDataDto resourceDataDto);
 
+    /**
+     * 规则详情
+     * @param id
+     * @return
+     */
+    public AppPromotionRuleDto detailAppRule(int id);
+
+    /**
+     * 资源详情
+     * @param id
+     * @return
+     */
+    public AppResourceDataDto detailAppResource(int id);
+
+
     public void deleteResource(int id);
     public void deleteRule(int id);
 

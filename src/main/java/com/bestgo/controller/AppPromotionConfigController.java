@@ -103,6 +103,46 @@ public class AppPromotionConfigController {
     }
 
     /**
+     * 资源详情
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/detailResource", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto detailResource(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
+        try{
+            AppResourceDataDto resource = appPromotionConfigService.detailAppResource(id);
+            responseDto.setResultObj(resource);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return responseDto;
+    }
+
+    /**
+     * 规则详情
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/detailRule", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto detailRule(@RequestParam(value = "id") int id){
+        ResponseDto responseDto = ResponseDto.instance(null);
+        try{
+            AppPromotionRuleDto rule = appPromotionConfigService.detailAppRule(id);
+            responseDto.setResultObj(rule);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseDto.setResultCode(BaseErrorEnum.ERROR.getCode());
+            responseDto.setResultMsg(BaseErrorEnum.ERROR.getName());
+        }
+        return responseDto;
+    }
+
+    /**
      * 重新执行初始化配置：将数据库批量配置，全部加载到内存
      * @return
      */
