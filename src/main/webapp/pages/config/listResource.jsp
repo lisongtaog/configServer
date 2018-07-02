@@ -5,43 +5,57 @@
     <title>应用资源配置</title>
 </head>
 <body>
-<div>
-    <form id="fm_resource">
-        <label for="country">国家</label>
-        <input type="text" id="country" name="country"/>
-        <%--后续读取数据库配置，下拉框展示 --%>
-        <%--<select name="country" id="country">
-            <option value="DEFAULT">默认</option>
-            <option value="US">美国</option>
-            <option value="AU">澳大利亚</option>
-            <option value="CA">加拿大</option>
-            <option value="GB">德国</option>
-        </select>--%>
-        <label for="appType">应用类型</label>
-        <select name="appType" id="appType">
-            <option value="01">游戏</option>
-            <option value="02">CallFlash</option>
-            <option value="03">杀毒</option>
-            <option value="04">计步器</option>
-            <option value="05">翻译</option>
-            <option value="06">voip</option>
-            <option value="07">VPN</option>
-            <option value="08">喝水宝</option>
-        </select>
+<div class="container">
+    <fieldset>
+        <legend>应用资源配置查询</legend>
+        <form id="fm_resource" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="country" class="col-md-1 control-label">国家</label>
+                <div class="col-sm-2">
+                <input type="text" id="country" name="country" class="form-control"/>
+                    <%--后续读取数据库配置，下拉框展示 --%>
+                    <%--<select name="country" id="country" form-control>
+                        <option value="DEFAULT">默认</option>
+                        <option value="US">美国</option>
+                        <option value="AU">澳大利亚</option>
+                        <option value="CA">加拿大</option>
+                        <option value="GB">德国</option>
+                    </select>--%>
+                </div>
 
-        <label for="appPkg">资源包信息</label>
-        <!--前端解析后的资源信息-->
-        <input id="appPkg" name="appPkg" />
+                <label for="appType" class="col-md-1 control-label">应用类型</label>
+                <div class="col-sm-2">
+                <select name="appType" id="appType" class="form-control">
+                    <option value="">全部</option>
+                    <option value="01">游戏</option>
+                    <option value="02">CallFlash</option>
+                    <option value="03">杀毒</option>
+                    <option value="04">计步器</option>
+                    <option value="05">翻译</option>
+                    <option value="06">voip</option>
+                    <option value="07">VPN</option>
+                    <option value="08">喝水宝</option>
+                </select>
+                </div>
 
-        <input type="button" value="查询" id="submit"/>
-    </form>
+                <label for="appPkg" class="col-md-1 control-label">资源包</label>
+                <div class="col-sm-3">
+                <!--前端解析后的资源信息-->
+                <input id="appPkg" name="appPkg" class="form-control"/>
+                </div>
+
+                <div class="col-sm-2">
+                    <input type="button" value="查询" id="submit" class="btn btn-info"/>
+                </div>
+        </form>
+    </fieldset>
 </div>
 
 <div id="editDIV" class="float" style="display: none;z-index: 9999;">
     <button class="closeBtn" style="float: right;">关闭</button>
     <form id="fm_edit" style="margin:50px 100px;">
         <label for="id">主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键</label>
-        <input type="text" id="id" name="id"/><br/>
+        <input type="text" id="id" name="id" readonly="readonly"/><br/>
 
 
         <label for="country">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</label>
@@ -84,7 +98,6 @@
         <input type="submit" value="提交" id="edit"/>
     </form>
 </div>
-
 <div>
     <table id="tab_resource" class="cell-border stripe myof">
         <thead>
@@ -153,8 +166,8 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<a href="javascript:void(0);retutn false;"  onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
-                        +'<a href="javascript:void(0);retutn false;"  onclick="del('+ row.id + ')">删除</a>';
+                    var html ='<a href="javascript:void(0);"  onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);"  onclick="del('+ row.id + ')">删除</a>';
                     return html;
                 }
             }

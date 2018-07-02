@@ -230,8 +230,8 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<a href="javascript:void(0);retutn false;" onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
-                        +'<a href="javascript:void(0);retutn false;" onclick="del('+ row.id + ')">删除</a>';
+                    var html ='<a href="javascript:void(0);" onclick="preEdit('+ ++rowIndex + ')">编辑</a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);" onclick="del('+ row.id + ')">删除</a>';
                     return html;
                 }
             },
@@ -252,7 +252,6 @@
     function fetchData(dataTableData,callback){
         rowIndex = 0;
         var data = $("#fm_rule").serializeObject();
-        console.info(data);
         data.pageNo = dataTableData.start / dataTableData.length + 1;
         data.pageSize = dataTableData.length;
 

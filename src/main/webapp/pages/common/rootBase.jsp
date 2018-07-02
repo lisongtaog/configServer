@@ -58,10 +58,8 @@
             console.log(textStatus);// 错误信息
         }
 
-        //jquery datatable 异常事件处理
-        //$.fn.dataTable.ext.errMode = 'none';
-        function dataTableError(e, settings, techNote, message){
-            console.log( 'An error has been reported by DataTables: ', message );
-        }
+        //jquery datatable 异常事件处理；取消弹窗警告
+        //开发过程中 可以放开进行调试
+        $.fn.dataTable.ext.errMode = 'none';
 
     </script>
