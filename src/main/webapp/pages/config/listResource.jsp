@@ -280,8 +280,8 @@
                 success: function (result) {
                     if(ResponseCode.success === result.resultCode){
                         alert("删除成功!");
-                        //TODO 刷新数据表格
-                        //$("#tab_resource").DataTable().fnDraw(false);
+                        //刷新数据表格
+                        $("#tab_resource").dataTable().fnDraw(false);
                     }
                 },
                 error:AJAXerror
@@ -312,8 +312,6 @@
                     $("#fm_edit #validstatus").val(resource.validstatus);
                     /*只要是修改：缓存状态就需要置为0，以便后续批量初始化*/
                     $("#fm_edit #init").val(0);
-                    //TODO 刷新数据表格
-                    //$("#tab_resource").DataTable().fnDraw(false);
                 }
             },
             error:AJAXerror
@@ -335,8 +333,9 @@
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
                     alert("修改成功!");
-                    //TODO 刷新数据表格
-                    //$("#tab_resource").DataTable().fnDraw(false);
+                    $('#editDIV').modal('hide');
+                    //刷新数据表格
+                    $("#tab_resource").dataTable().fnDraw(false);
                 }
             },
             error:AJAXerror
