@@ -47,57 +47,85 @@
                 <div class="col-sm-2">
                     <input type="button" value="查询" id="submit" class="btn btn-info"/>
                 </div>
+            </div>
         </form>
     </fieldset>
 </div>
 
-<div id="editDIV" class="float" style="display: none;z-index: 9999;">
-    <button class="closeBtn" style="float: right;">关闭</button>
-    <form id="fm_edit" style="margin:50px 100px;">
-        <label for="id">主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键</label>
-        <input type="text" id="id" name="id" readonly="readonly"/><br/>
 
+<div class="modal fade" id="editDIV" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改资源</h4>
+            </div>
+            <div class="modal-body">
+                <form id="fm_edit" >
+                    <div class="form-group">
+                        <label for="id" class="control-label">主键</label>
+                        <input type="text" id="id" name="id" readonly="readonly" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="country" class="control-label">国家</label>
+                        <input type="text" id="country" name="country" class="form-control"/>
+                        <%--后续读取数据库配置，下拉框展示 --%>
+                        <%--<select name="country" id="country">
+                            <option value="DEFAULT">默认</option>
+                            <option value="US">美国</option>
+                            <option value="AU">澳大利亚</option>
+                            <option value="CA">加拿大</option>
+                            <option value="GB">德国</option>
+                        </select>--%>
+                    </div>
+                    <div class="form-group">
+                        <label for="appType" class="control-label">应用类型</label>
+                        <select name="appType" id="appType" class="form-control">
+                            <option value="01">游戏</option>
+                            <option value="02">CallFlash</option>
+                            <option value="03">杀毒</option>
+                            <option value="04">计步器</option>
+                            <option value="05">翻译</option>
+                            <option value="06">voip</option>
+                            <option value="07">VPN</option>
+                            <option value="08">喝水宝</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appPkg" class="control-label">资源包</label>
+                        <input id="appPkg" name="appPkg" class="form-control"/>
+                    </div>
 
-        <label for="country">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家</label>
-        <input type="text" id="country" name="country"/><br/>
-        <%--后续读取数据库配置，下拉框展示 --%>
-        <%--<select name="country" id="country">
-            <option value="DEFAULT">默认</option>
-            <option value="US">美国</option>
-            <option value="AU">澳大利亚</option>
-            <option value="CA">加拿大</option>
-            <option value="GB">德国</option>
-        </select>--%>
-        <label for="appType">应用类型</label>
-        <select name="appType" id="appType">
-            <option value="01">游戏</option>
-            <option value="02">CallFlash</option>
-            <option value="03">杀毒</option>
-            <option value="04">计步器</option>
-            <option value="05">翻译</option>
-            <option value="06">voip</option>
-            <option value="07">VPN</option>
-            <option value="08">喝水宝</option>
-        </select><br/>
-
-        <label for="appPkg">资源包&nbsp;&nbsp;</label>
-        <input id="appPkg" name="appPkg"></input><br/>
-
-        <label for="validstatus">有效状态</label>
-        <select id="validstatus" name="validstatus">
-            <option value="1">有效</option>
-            <option value="0">无效</option>
-        </select><br/>
-        <%--如果修改，应该是 未初始化--%>
-        <label for="init">初始化状态</label>
-        <select id="init" name="init">
-            <option value="0">未初始化</option>
-            <option value="1">已初始化</option>
-        </select><br/><br/>
-
-        <input type="submit" value="提交" id="edit"/>
-    </form>
+                    <div class="form-group">
+                        <label for="validstatus" class="control-label">有效状态</label>
+                        <select id="validstatus" name="validstatus" class="form-control">
+                            <option value="1">有效</option>
+                            <option value="0">无效</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <%--如果修改，应该是 未初始化--%>
+                        <label for="init" class="control-label">初始化状态</label>
+                        <select id="init" name="init" class="form-control">
+                            <option value="0">未初始化</option>
+                            <option value="1">已初始化</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                </button>
+                <button type="button" id="btn_edit" class="btn btn-primary" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                </button>
+                <%--<input type="submit" value="提交" id="" class="btn btn-primary"/>--%>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div>
     <table id="tab_resource" class="cell-border stripe myof">
         <thead>
@@ -269,7 +297,8 @@
      * @param rowIndex  记录所在行号
      */
     function preEdit(rowIndex) {
-        $("#editDIV").show();
+        //$("#editDIV").show();
+        $('#editDIV').modal();
         var row = $("#tab_resource tr:eq("+rowIndex+")");
 
         var id,country,appType,appPkg,appName,validstatus,init;
@@ -295,7 +324,7 @@
     /**
      * 更新/修改
      */
-    $("#edit").click(function () {
+    $("#btn_edit").click(function () {
         var url = "${ctx}/appPromotionConfig/updateAppResource";
         var data = $("#fm_edit").serializeObject();
         $.ajax({

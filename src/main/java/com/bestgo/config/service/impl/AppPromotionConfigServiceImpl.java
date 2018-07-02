@@ -55,9 +55,12 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
         }
         if(StringUtils.isNotBlank(country) && StringUtils.isNotBlank(appPkg)){
             rtnList = CACH_RULE.get(getCacheKey(country,appPkg));
-        }else if (StringUtils.isNotBlank(country)){
+        }
+        if (rtnList == null && StringUtils.isNotBlank(country)){
             rtnList = CACH_RULE.get(getCacheKey(country,ConfigConstant.DEFAULT));
-        }else {
+        }
+
+        if(rtnList == null && StringUtils.isNotBlank(appPkg)){
             rtnList = CACH_RULE.get(getCacheKey(ConfigConstant.DEFAULT,appPkg));
         }
 
