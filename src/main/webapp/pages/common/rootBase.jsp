@@ -36,6 +36,12 @@
             "success":"0000",
             "error":"9999"
         }
+
+        //操作类型
+        var Operate = {
+            "view":0,//查看详情
+            "edit":1 //编辑修改
+        }
         $.fn.serializeObject = function()
         {
             var o = {};

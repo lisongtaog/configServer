@@ -158,7 +158,7 @@
         { "data": "init","orderable":false,"width":"35px"},
         { "data": "createTime","width":"150px"},
         { "data": "updateTime","width":"150px"},
-        { "data": "operate","width":"35px"}
+        { "data": "operate","width":"55px"}
     ];
     var options = {
         "searching": false,// 是否允许检索
@@ -193,8 +193,9 @@
                 "targets":-1,
                 "bSortable": false,
                 render: function(data, type, row) {
-                    var html ='<a href="javascript:void(0);" class="link_modify glyphicon glyphicon-pencil" onclick="preEdit('+ row.id + ')"></a>&nbsp;&nbsp;'
-                        +'<a href="javascript:void(0);" class="link_delete glyphicon glyphicon-remove" onclick="del('+ row.id + ')"></a>';
+                    var html ='<a href="javascript:void(0);" class="glyphicon glyphicon-book" onclick="preEdit('+ row.id + ',0)"></a>&nbsp;&nbsp;'
+                            +'<a href="javascript:void(0);" class="glyphicon glyphicon-pencil" onclick="preEdit('+ row.id + ',1)"></a>&nbsp;&nbsp;'
+                        +'<a href="javascript:void(0);" class="glyphicon glyphicon-remove" onclick="del('+ row.id + ')"></a>';
                     return html;
                 }
             },
@@ -289,11 +290,19 @@
         }
     };
 
+    var btnEdit = $("#btn_edit");
+
     /**
      * 修改前，加载展示数据
      * @param id  资源id
+     * @param   operate 操作类型：edit：修改 ；view：查看
      */
-    function preEdit(id) {
+    function preEdit(id,operate) {
+        if(Operate.edit === operate){//编辑
+            btnEdit.show();
+        }else if(Operate.view === operate){//查看详情
+            btnEdit.hide();
+        }
         $('#editDIV').modal();
         var url = "${ctx}/appPromotionConfig/detailResource";
         $.ajax({
