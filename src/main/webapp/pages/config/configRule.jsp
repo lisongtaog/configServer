@@ -196,7 +196,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" id="submit" class="btn btn-default col-lg-1 col-lg-offset-6">提交</button>
+            <button id="submit" class="btn btn-default col-lg-1 col-lg-offset-6">提交</button>
         </div>
     </form>
 </div>
