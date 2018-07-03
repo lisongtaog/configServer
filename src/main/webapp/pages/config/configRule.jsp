@@ -105,9 +105,9 @@
             <label for="priority" class="col-md-1 control-label">优先级</label>
             <div class="col-sm-3">
                 <select id="priority" name="priority" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <c:forEach var="index" begin="1" end="10" step="1">
+                        <option value="${index}">${index}</option>
+                    </c:forEach>
                 </select>
             </div>
 
@@ -206,7 +206,24 @@
     var rules = {
         country:"required",
         appPkg:"required",
-        conditions:"required"
+        conditions:"required",
+        popuptimes:{
+            required:true,
+            digits:true,
+            range:[1,10]
+        },
+        linkUrl:{
+            url:true
+        },
+        iconUrl:{
+            url:true
+        },
+        bigImageUrl:{
+            url:true
+        },
+        nativeImageUrl:{
+            url:true
+        }
     };
     var messages = {
         country: "必录项",
@@ -214,16 +231,29 @@
         conditions: "必录项"
     };
 
+    //表单验证器
+    var validator;
+
     $().ready(function() {
         // 在键盘按下并释放及提交后验证提交表单
-        $("#fm_rule").validate({
+        validator = $("#fm_rule").validate({
             rules: rules,
-            messages:messages
+            messages:messages,
+            onfocusin: function(element) { $(element).valid(); },
+            onfocusout: function(element) { $(element).valid(); },
+            onclick: function(element) { $(element).valid(); },
+            onkeyup: function(element) { $(element).valid(); }
         });
     });
 
 
     $("#submit").click(function () {
+
+        if(!validator.valid()){
+            alert("表单验证未通过");
+            return false;
+        }
+
         var data = $("#fm_rule").serializeObject();
         var url = "${ctx}/appPromotionConfig/addAppRule";
         $.ajax({
@@ -235,7 +265,8 @@
             success: function (result) {
                 if(ResponseCode.success === result.resultCode){
                     alert("新增成功");
-                    document.getElementById("#fm_rule").reset();
+                    validator.resetForm();
+                    //document.getElementById("fm_rule").reset();
                 }else {
                     alert("新增失败");
                 }

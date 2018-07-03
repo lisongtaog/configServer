@@ -72,9 +72,9 @@
                         <label for="priority" class="col-md-1 control-label">优先级</label>
                         <div class="col-sm-3">
                             <select id="priority" name="priority" class="form-control">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
+                                <c:forEach var="index" begin="1" end="10" step="1">
+                                    <option value="${index}">${index}</option>
+                                </c:forEach>
                             </select>
                         </div>
 

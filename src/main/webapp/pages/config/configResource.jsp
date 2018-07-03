@@ -83,7 +83,7 @@
         <div class="form-group">
             <label for="appResource" class="control-label col-md-2">资源包</label>
             <div class="col-md-8">
-                <textarea id="appResource" name="appResource" rows="5" class="form-control" placeholder="输入格式:JSON对象[{},{}]或单独的字符串"></textarea>
+                <textarea id="appResource" name="appResource" rows="5" class="form-control" placeholder='输入格式:JSONArray["com.app1","com.app2"] 或 单独的字符串'></textarea>
             </div>
         </div>
 
@@ -123,16 +123,27 @@
         appResource: "必录项"
     };
 
+    //表单验证器
+    var validator;
+
     $().ready(function() {
         // 在键盘按下并释放及提交后验证提交表单
-        $("#fm_resource").validate({
+        validator = $("#fm_resource").validate({
             rules: rules,
-            messages:messages
+            messages:messages,
+            onfocusin: function(element) { $(element).valid(); },
+            onfocusout: function(element) { $(element).valid(); },
+            onclick: function(element) { $(element).valid(); },
+            onkeyup: function(element) { $(element).valid(); }
         });
     });
 
 
     $("#submit").click(function () {
+        if(!validator.valid()){
+            alert("表单验证未通过");
+            return false;
+        }
         var data = $("#fm_resource").serializeObject();
         data.appResource = parseResource(data.appResource);
         var poupMsg = confirm("共计配置资源：" + data.appResource.length +"个，确认提交吗？");
@@ -147,7 +158,8 @@
                 success: function (result) {
                     if(ResponseCode.success === result.resultCode){
                         alert("新增成功");
-                        document.getElementById("#fm_resource").reset();
+                        validator.resetForm();
+                        //document.getElementById("fm_resource").reset();
                     }else {
                         alert("新增失败");
                     }
@@ -175,7 +187,7 @@
         try{
             resource = $.parseJSON(jsonStr);
         }catch (e){
-            console.info("parse resource app to json array failed ! by defaule:regard the single value as a APP resource");
+            console.info("parse resource app to json array failed ! by default:regard the single value as a APP resource");
             resource.push(jsonStr);
         }
         return resource;
