@@ -81,9 +81,9 @@
         </div>
 
         <div class="form-group">
-            <label for="appPkg" class="control-label col-md-2">资源包</label>
+            <label for="appResource" class="control-label col-md-2">资源包</label>
             <div class="col-md-8">
-                <input id="appPkg" name="appPkg" class="form-control"/>
+                <textarea id="appResource" name="appResource" rows="5" class="form-control" placeholder="输入格式:JSON对象[{},{}]或单独的字符串"></textarea>
             </div>
         </div>
 
