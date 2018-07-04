@@ -75,6 +75,8 @@
                     <option value="06">voip</option>
                     <option value="07">VPN</option>
                     <option value="08">喝水宝</option>
+                    <option value="09">Solitaire</option>
+                    <option value="10">CoinPusher</option>
                 </select>
             </div>
 

@@ -113,6 +113,7 @@
                             <select name="actionType" id="actionType" class="form-control">
                                 <option value="app">app</option>
                                 <option value="link">link</option>
+                                <option value="webview">webview</option>
                             </select>
                         </div>
 
