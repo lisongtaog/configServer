@@ -9,7 +9,7 @@
 <%@ include file="pages/common/rootBase.jsp"%>
 <html>
 <head>
-    <title>Index</title>
+    <title>Config Server Index</title>
     <style>
         #nav{
             position:fixed;
@@ -18,8 +18,9 @@
             float:top;
         }
         iframe{
-            height:85%;
+            height:100%;
             width:100%;
+            overflow-x:hidden;
         }
     </style>
 </head>
@@ -28,17 +29,13 @@
     <nav class="navbar navbar-default nav-stacked">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header col-md-1">
+            <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand glyphicon glyphicon-home active" href="index.html" target="theFrame"></a>
             </div>
             <div class="container-fluid col-md-11">
-                <div>
+                <%--<div>
                     <div class="col-lg-6">
                         <form class="navbar-form navbar-left" method="post" action="appPromotionConfig/queryResource" enctype="multipart/form-data">
                             <div class="form-group">
@@ -58,7 +55,7 @@
                         </form>
                     </div>
                 </div>
-
+--%>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="pages/config/listResource.jsp" target="theFrame">查询资源</a></li>
@@ -79,7 +76,8 @@
         </div>
     </nav>
 </div>
-<div style="height: 15%;width:100%"></div>
-<iframe src="Javascript:void(0)" name="theFrame" frameborder="0" scrolling="no"></iframe>
+<div style="height:100%;width:100%;padding: 60px 10px 5px 10px;">
+    <iframe src="index.html" name="theFrame" frameborder="0" scrolling="auto"></iframe>
+</div>
 </body>
 </html>
