@@ -384,13 +384,11 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
 
     @Override
     public PageInfo listAppRules(AppPromotionRuleDto ruleDto) {
-        int i = 1;
         AbstractPageQuery<AppPromotionRuleDto, AppPromotionRuleDto> query = new AbstractPageQuery<AppPromotionRuleDto, AppPromotionRuleDto>() {
             @Override
             protected List<AppPromotionRule> doQueryPage(AppPromotionRuleDto condition) {
                 AppPromotionRuleExample example = new AppPromotionRuleExample();
                 AppPromotionRuleExample.Criteria criteria = example.createCriteria();
-                criteria.andValidstatusEqualTo("1");//状态是有效的
                 if(null !=ruleDto && StringUtils.isNotBlank(ruleDto.getCountry())){
                     criteria.andCountryEqualTo(ruleDto.getCountry());
                 }
@@ -422,7 +420,6 @@ public class AppPromotionConfigServiceImpl implements AppPromotionConfigService 
             protected List<AppResourceData> doQueryPage(AppResourceDataDto condition) {
                 AppResourceDataExample example = new AppResourceDataExample();
                 AppResourceDataExample.Criteria criteria = example.createCriteria();
-                criteria.andValidstatusEqualTo("1");//状态是有效的
                 if(null !=resourceDataDto && StringUtils.isNotBlank(resourceDataDto.getCountry())){
                     criteria.andCountryEqualTo(resourceDataDto.getCountry());
                 }
