@@ -122,8 +122,8 @@
             <label for="init" class="col-md-1 control-label">缓存<br/>状态</label>
             <div class="col-sm-3">
                 <select id="init" name="init" class="form-control">
-                    <option value="1">有效</option>
-                    <option value="0">无效</option>
+                    <option value="0" selected="selected">无效</option>
+                    <%--<option value="1">有效</option>--%>
                 </select>
             </div>
         </div>
@@ -207,7 +207,7 @@
     var rules = {
         country:"required",
         appPkg:"required",
-        conditions:"required",
+        //conditions:"required",
         popuptimes:{
             required:true,
             digits:true,
