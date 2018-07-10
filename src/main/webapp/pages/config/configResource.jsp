@@ -94,8 +94,8 @@
             <div class="col-md-3">
                 <%--如果修改，应该是 未初始化--%>
                 <select id="init" name="init" class="form-control">
-                    <option value="0">未初始化</option>
-                    <option value="1">已初始化</option>
+                    <option value="0" selected="selected">未初始化</option>
+                    <%--<option value="1">已初始化</option>--%>
                 </select>
             </div>
         </div>
