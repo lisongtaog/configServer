@@ -2,7 +2,7 @@
 <%@ include file="../common/rootBase.jsp"%>
 <html>
 <head>
-    <title>应用资源配置</title>
+    <title>应用资源配置查询</title>
 </head>
 <body>
 <div class="container">
@@ -12,15 +12,8 @@
             <div class="form-group">
                 <label for="country" class="col-md-1 control-label">国家</label>
                 <div class="col-sm-2">
-                <input type="text" id="country" name="country" class="form-control"/>
-                    <%--后续读取数据库配置，下拉框展示 --%>
-                    <%--<select name="country" id="country" form-control>
-                        <option value="DEFAULT">默认</option>
-                        <option value="US">美国</option>
-                        <option value="AU">澳大利亚</option>
-                        <option value="CA">加拿大</option>
-                        <option value="GB">德国</option>
-                    </select>--%>
+                    <select name="country" id="country" class="form-control">
+                    </select>
                 </div>
 
                 <label for="appType" class="col-md-1 control-label">应用类型</label>
@@ -70,15 +63,13 @@
                     </div>
                     <div class="form-group">
                         <label for="country" class="control-label">国家</label>
-                        <input type="text" id="country" name="country" class="form-control"/>
-                        <%--后续读取数据库配置，下拉框展示 --%>
-                        <%--<select name="country" id="country">
+                        <select name="country" id="country" class="form-control">
                             <option value="DEFAULT">默认</option>
                             <option value="US">美国</option>
                             <option value="AU">澳大利亚</option>
                             <option value="CA">加拿大</option>
                             <option value="GB">德国</option>
-                        </select>--%>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="appType" class="control-label">应用类型</label>
@@ -262,6 +253,34 @@
 
     $().ready(function() {
         $('#tab_resource').DataTable(options);
+
+        //加载国家下拉框
+        var countryDropdown = $("select[name='country']");
+        var url = "${ctx}/DropdownMenu/queryCountry";
+        $.ajax({
+            url:url,
+            type:"post",
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success:function(result){
+                console.log(result);
+                countryDropdown.each(function(idx,e){
+                    for(var i = 0;i<result.length;i++){
+                        var one = result[i];
+                        var option = $("<option value='" + one.country_code + "'>" + one.country_name + "</option>");
+                        $(e).append(option);
+                    }
+                });
+            },
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+                // 状态码
+                console.log(XMLHttpRequest.status);
+                // 状态
+                console.log(XMLHttpRequest.readyState);
+                // 错误信息
+                console.log(textStatus);
+            }
+        });
     });
 
     //触发查询
