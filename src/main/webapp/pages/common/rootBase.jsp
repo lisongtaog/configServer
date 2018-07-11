@@ -69,5 +69,32 @@
         //jquery datatable 异常事件处理；取消弹窗警告
         //开发过程中 可以放开进行调试
         $.fn.dataTable.ext.errMode = 'none';
+        var SELECT_COUNTRY;
+        var SELECT_COUNTRY_OPTION;
+        function initCountrySelect() {
+            var url = "${ctx}/DropdownMenu/queryCountry";
+            $.ajax({
+                url:url,
+                type:"post",
+                contentType:"application/json;charset=utf-8",
+                dataType:"json",
+                success:function(result){
+                    if(null != result && result.length > 0){
+                        SELECT_COUNTRY = result;
+                        SELECT_COUNTRY_OPTION = "<option value='DEFAULT'>DEFAULT</option>";
+                        var one,option;
+                        for(var i = 0;i<result.length;i++){
+                            one = result[i];
+                            option = "<option value='" + one.countryCode + "'>" + one.countryName + "</option>";
+                            SELECT_COUNTRY_OPTION += option;
+                        }
+                        $("select[name='country']").each(function (index,element) {
+                            $(this).append(SELECT_COUNTRY_OPTION);
+                        });
+                    }
+                },
+                error:AJAXerror
+            });
+        }
 
     </script>

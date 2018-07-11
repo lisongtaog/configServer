@@ -33,34 +33,11 @@ public class AppCountryCodeDictServiceImpl implements AppCountryCodeDictService 
         List rtnList = new ArrayList();
         try{
             example.setOrderByClause(" country_code ASC");
-            List<AppCountryCodeDict> result = appCountryCodeDictMapper.selectByExample(example);
-
-            if(result == null || result.size() == 0){//此逻辑认为appPkg传递正确/国家错误，如果通过appPkg查询无数据，则查询这appPkg个默认的（国家为DEFAULT）
-                example.clear();
-                example.setOrderByClause(" priority ASC");
-                result = appCountryCodeDictMapper.selectByExample(example);
-            }
-
-            rtnList = pakageCountrys(result); //封装国家列表
+            rtnList = appCountryCodeDictMapper.selectByExample(example);
         }catch (Exception e){
             e.printStackTrace();
         }
 
         return rtnList;
-    }
-
-    // 打包返回的查询结果
-    public List pakageCountrys(List<AppCountryCodeDict> result){
-        List rtnList = new ArrayList();
-        Map country = null;
-
-        for(AppCountryCodeDict one : result){
-            country = new HashMap();
-            country.put("country_name",one.getCountryName());
-            country.put("country_code",one.getCountryCode());
-            rtnList.add(country);
-        }
-
-        return  rtnList;
     }
 }

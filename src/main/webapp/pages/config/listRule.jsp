@@ -301,32 +301,7 @@
     $().ready(function() {
         $('#tab_rule').DataTable(options);
         //加载国家下拉框
-        var countryDropdown = $("select[name='country']");
-        var url = "${ctx}/DropdownMenu/queryCountry";
-        $.ajax({
-            url:url,
-            type:"post",
-            contentType:"application/json;charset=utf-8",
-            dataType:"json",
-            success:function(result){
-                console.log(result);
-                countryDropdown.each(function(idx,e){
-                    for(var i = 0;i<result.length;i++){
-                        var one = result[i];
-                        var option = $("<option value='" + one.country_code + "'>" + one.country_name + "</option>");
-                        $(e).append(option);
-                    }
-                });
-            },
-            error:function (XMLHttpRequest, textStatus, errorThrown) {
-                // 状态码
-                console.log(XMLHttpRequest.status);
-                // 状态
-                console.log(XMLHttpRequest.readyState);
-                // 错误信息
-                console.log(textStatus);
-            }
-        });
+        initCountrySelect();
     });
 
     //触发查询

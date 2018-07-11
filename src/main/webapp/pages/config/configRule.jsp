@@ -240,30 +240,7 @@
         });
 
         //加载国家下拉框
-        var countryDropdown = $("#country");
-        var url = "${ctx}/DropdownMenu/queryCountry";
-        $.ajax({
-            url:url,
-            type:"post",
-            contentType:"application/json;charset=utf-8",
-            dataType:"json",
-            success:function(result){
-                console.log(result);
-                for(var i = 0;i<result.length;i++){
-                    var one = result[i];
-                    var option = $("<option value='" + one.country_code + "'>" + one.country_name + "</option>");
-                    countryDropdown.append(option);
-                }
-            },
-            error:function (XMLHttpRequest, textStatus, errorThrown) {
-                // 状态码
-                console.log(XMLHttpRequest.status);
-                // 状态
-                console.log(XMLHttpRequest.readyState);
-                // 错误信息
-                console.log(textStatus);
-            }
-        });
+        initCountrySelect();
     });
 
 
