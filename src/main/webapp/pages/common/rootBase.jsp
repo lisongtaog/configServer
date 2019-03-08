@@ -9,13 +9,17 @@
 
     <%--最根本的jsp页面，用于定义引入基本的js和css--%>
     <link rel="stylesheet" href="${ctx}/statics/css/base.css?v=${version}" />
+
     <script type="text/javascript" language="JavaScript" src="${ctx}/statics/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/statics/js/jquery-ui/jquery-ui.min.js"></script>
+
     <link rel="stylesheet" href="${ctx}/statics/js/jquery-ui/jquery-ui.min.css"/>
     <link rel="stylesheet" href="${ctx}/statics/js/jquery-ui/jquery-ui.theme.min.css"/>
     <link rel="stylesheet" href="${ctx}/statics/js/jquery-ui/jquery-ui.structure.min.css"/>
+
     <link rel="stylesheet" href="${ctx}/statics/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${ctx}/statics/bootstrap/css/bootstrap-theme.min.css"/>
+
     <link rel="stylesheet" href="${ctx}/statics/css/bootstrap-tagsinput.css"/>
     <link rel="stylesheet" href="${ctx}/statics/css/bootstrap-datetimepicker.css"/>
 
@@ -24,6 +28,7 @@
     <script src="${ctx}/statics/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="${ctx}/statics/js/jquery.form.js"></script>
     <script src="${ctx}/statics/js/jquery-validation/jquery.validate.min.js"></script>
+
     <link rel="stylesheet" href="${ctx}/statics/js/datatables/datatables.min.css" />
     <script src="${ctx}/statics/js/datatables/datatables.min.js"></script>
 
